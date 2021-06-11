@@ -1,0 +1,27 @@
+version: "3"
+services:
+  react:
+    restart: always
+    build:
+      dockerfile: ./Frontend/Dockerfile
+    volumes:
+      - "./:/Frontend"
+    ports:
+      - 3000:3000
+    command: npm start
+  node:
+    restart: always
+    build:
+      dockerfile: ./server/Dockerfile
+    ports:
+      - 80:3030
+    volumes:
+      - ./:/server
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+volumes:
+  mongodb:
