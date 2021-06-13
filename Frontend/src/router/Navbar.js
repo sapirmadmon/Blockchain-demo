@@ -8,6 +8,9 @@ function Navbar(props) {
         <li key="/">
           <Link to="/">Home</Link>
         </li>
+        <li key="/">
+          <Link to="/block">block</Link>
+        </li>
         {props.listCityName.map((cityName) => (
           <li key={cityName}>
             <Link to={"/" + cityName}>{cityName}</Link>

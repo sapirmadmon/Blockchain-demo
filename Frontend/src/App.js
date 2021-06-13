@@ -2,6 +2,7 @@ import "./App.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "./router/Navbar";
+import Block from "./blockchain/block";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
@@ -25,7 +26,10 @@ function App() {
         <Navbar listCityName={[]} />
         <Switch>
           <Route path="/somePage">some page</Route>
-          <Route path="/">hello world</Route>
+          <Route path="/block">
+            <Block></Block>
+          </Route>
+          <Route path="/">hello world home</Route>
         </Switch>
       </div>
     </Router>
