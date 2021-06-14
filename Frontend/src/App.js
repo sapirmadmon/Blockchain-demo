@@ -25,7 +25,7 @@ function App() {
       <div className="App">
         <Navbar listCityName={[]} />
         <Switch>
-          <Route path="/somePage">some page</Route>
+          <Route path="/somePage">some page 1</Route>
           <Route path="/block">
             <Block></Block>
           </Route>
