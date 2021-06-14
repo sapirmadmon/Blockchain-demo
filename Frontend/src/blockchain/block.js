@@ -1,7 +1,14 @@
-import Card from "@material-ui/core/Card";
+import style from "./block.module.css";
+import React from "react";
 
 function Block() {
-  return <div>some block here</div>;
+  //const [dataHash, setDataHash] = useState("");
+  return (
+    <div>
+      <h1 className={style.title}>SHA256 Hash</h1>
+      some block here
+    </div>
+  );
 }
 
 export default Block;
