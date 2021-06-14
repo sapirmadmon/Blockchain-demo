@@ -1,8 +1,8 @@
 import style from "./block.module.css";
-import React, { useState } from "react";
+import React from "react";
 
 function Block() {
-  const [dataHash, setDataHash] = useState("");
+  //const [dataHash, setDataHash] = useState("");
   return (
     <div>
       <h1 className={style.title}>SHA256 Hash</h1>

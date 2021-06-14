@@ -11,7 +11,7 @@ function Navbar(props) {
         <li key="/1">
           <Link to="/block">Block</Link>
         </li>
-        <li key="/2">
+        <li key="/3">
           <Link to="/hash">Hash</Link>
         </li>
         {props.listCityName.map((cityName) => (

@@ -2,19 +2,15 @@ import style from "./hasa.module.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-function Hasa() {
+const Hasa = () => {
   const [dataHash, setDataHash] = useState("");
   const [hash, setHash] = useState("");
 
-  const callAPI = () => {
-    axios
-      .post("http://localhost:3030/blockchain/hash")
-      .then((res) => setHash(res))
-      .catch((error) => console.log(error));
-  };
   //after render to DOM
   useEffect(() => {
-    callAPI();
+    axios
+      .post("http://localhost:3030/blockchain/hash", { data: dataHash })
+      .then((res) => setHash(res.data));
   }, [dataHash]);
 
   const onChangeHash = (e) => {
@@ -22,20 +18,21 @@ function Hasa() {
   };
 
   return (
-    <div>
-      <h1 className={style.title}>SHA256 Hash</h1>
+    <div className={style.title}>
+      <h1>SHA256 Hash</h1>
       <div>
         <input
           type="text"
-          id="hash"
-          name="hash"
-          value={hash}
+          id=""
+          name=""
+          value={dataHash}
           onChange={onChangeHash}
         />
-        <div>hash</div>
+        <div>{hash}</div>
+        {/*<button onClick={addData}>send</button>*/}
       </div>
     </div>
   );
-}
+};
 
 export default Hasa;
