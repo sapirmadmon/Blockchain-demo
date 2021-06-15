@@ -1,10 +1,10 @@
-import "./App.css";
+import "./App.module.css";
 import React, { useEffect } from "react";
 import axios from "axios";
 import Navbar from "./router/Navbar";
 import Block from "./blockchain/block";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Hasa from "./hasa/hasa";
+import Hash from "./hash/hash";
 
 function App() {
   //const [apiData, setApiData] = useState([]);
@@ -23,7 +23,7 @@ function App() {
 
   return (
     <Router>
-      <div className="App">
+      <div>
         <Navbar listCityName={[]} />
         <Switch>
           <Route path="/somePage">some page 1</Route>
@@ -31,7 +31,7 @@ function App() {
             <Block></Block>
           </Route>
           <Route path="/hash">
-            <Hasa></Hasa>
+            <Hash></Hash>
           </Route>
         </Switch>
       </div>

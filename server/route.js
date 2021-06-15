@@ -4,6 +4,7 @@ const websiteContent = require("./model/webSchema");
 const upload = require("./middleware/upload");
 const fs = require("fs");
 const CryptoBlock = require("./blockchain/block");
+let block;
 
 router.get("/", (req, res) => {
   res.sendFile(process.cwd() + "/../Frontend/public/index.html");
@@ -21,6 +22,30 @@ router.post("/blockchain/hash", (req, res) => {
   const hash = block.hash;
   res.header("Access-Control-Allow-Origin", "*");
   res.send(hash);
+});
+
+router.post("/blockchain/block", (req, res) => {
+  const index = req.body.index;
+  //const nonce = req.body.nonce;
+  const data = req.body.data;
+  if (block === undefined) {
+    block = new CryptoBlock(index, Date.now(), data);
+    block.mineBlock(3);
+  } else if (index !== block.index || data !== block.data) {
+    block = new CryptoBlock(index, Date.now(), data);
+    block.mineBlock(3);
+  } else if (block.nonce !== req.body.nonce) {
+    block.nonce = req.body.nonce;
+    block.hash = block.computeHash();
+  }
+
+  res.header("Access-Control-Allow-Origin", "*");
+  res.json({
+    index: block.index,
+    nonce: block.nonce,
+    data: block.data,
+    hash: block.hash,
+  });
 });
 
 router.post("/addWebsite", upload.single("image"), (req, res) => {
