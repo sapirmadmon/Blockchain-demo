@@ -1,5 +1,5 @@
 import style from "./block.module.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Card from "./../card/card";
 import InputResult from "../input/inputResult";
 import axios from "axios";
@@ -7,26 +7,10 @@ import axios from "axios";
 const Block = () => {
   const [dataHash, setDataHash] = useState("");
   const [block, setBlock] = useState("");
+  const blockRef = useRef(0);
   const [hash, setHash] = useState("");
   const [nonce, setNonce] = useState("");
   const [background, SetBackground] = useState(true);
-
-  const callApi = () => {
-    axios
-      .post("http://localhost:3030/blockchain/block", {
-        data: dataHash,
-        index: block,
-        nonce: nonce,
-      })
-      .then((res) => {
-        if (res.data.hash === hash) {
-          //  SetBackground(true);
-        } else {
-          //SetBackground(false);
-        }
-      });
-    SetBackground(true);
-  };
 
   useEffect(() => {
     axios
@@ -57,7 +41,8 @@ const Block = () => {
       })
       .then((res) => {
         setHash(res.data.hash);
-        setBlock(res.data.index);
+        //setBlock(res.data.index);
+        blockRef.current = res.data.index;
       });
   }, [block]);
 
@@ -151,7 +136,7 @@ const Block = () => {
         title="Block"
         result={inputResult}
         childern={divInput}
-        callApi={() => callApi()}
+        callApi={() => SetBackground(true)}
         color={background}
       />
     </div>

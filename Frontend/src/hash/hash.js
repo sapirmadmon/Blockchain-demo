@@ -52,6 +52,7 @@ const Hasa = () => {
         title="SHA256 Hash"
         childern={inputText}
         result={inputResult}
+        color={true}
       />
     </div>
   );

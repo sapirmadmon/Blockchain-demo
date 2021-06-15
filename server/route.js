@@ -29,7 +29,7 @@ router.post("/blockchain/block", (req, res) => {
   //const nonce = req.body.nonce;
   const data = req.body.data;
   if (block === undefined) {
-    block = new CryptoBlock(index, Date.now(), data);
+    block = new CryptoBlock(0, Date.now(), "");
     block.mineBlock(3);
   } else if (index !== block.index || data !== block.data) {
     block = new CryptoBlock(index, Date.now(), data);
