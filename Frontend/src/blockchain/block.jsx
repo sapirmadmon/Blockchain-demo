@@ -1,6 +1,6 @@
 import style from "./block.module.css";
 import React, { useState, useEffect } from "react";
-import Card from "./../card/card";
+import Card from "../card/card";
 import InputResult from "../input/inputResult";
 import axios from "axios";
 
@@ -14,11 +14,13 @@ const Block = () => {
 
   //init block
   useEffect(() => {
+    console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
+
     axios.get("http://localhost:3030/blockchain/initBlock").then((res) => {
       setBlock(res.data.index);
       setNonce(res.data.nonce);
       setHash(res.data.hash);
-      setDataHash("");
+      setDataHash(res.data.data);
     });
     console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
   }, []);
@@ -26,21 +28,21 @@ const Block = () => {
   // on change data or block or nonce
   useEffect(() => {
     console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
-
-    axios
-      .post("http://localhost:3030/blockchain/block", {
-        data: dataHash,
-        index: block,
-        nonce: nonce,
-      })
-      .then((res) => {
-        setHash(res.data.hash);
-      });
+    if (ifMine) {
+      axios
+        .post("http://localhost:3030/blockchain/block", {
+          data: dataHash,
+          index: block,
+          nonce: nonce,
+        })
+        .then((res) => {
+          setHash(res.data.hash);
+        });
+    }
     console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
   }, [ifMine]);
 
   const mineBlock = () => {
-    setIfMine(true);
     SetBackground(true);
     console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
 
@@ -60,29 +62,29 @@ const Block = () => {
   };
 
   const onChangeHash = (e) => {
+    setIfMine(!ifMine);
     setDataHash(e.target.value);
     SetBackground(false);
-    setIfMine(!ifMine);
   };
 
   const onChangeNonce = (e) => {
+    setIfMine(!ifMine);
     setNonce(e.target.value);
     SetBackground(false);
-    setIfMine(!ifMine);
   };
 
   const onChangeBlock = (e) => {
+    setIfMine(!ifMine);
     setBlock(e.target.value);
     SetBackground(false);
-    setIfMine(!ifMine);
   };
 
   const inputResult = (
     <div>
       <label htmlFor="hash" className={style.marginInput}>
         Hash:
-      </label>{" "}
-      <InputResult result={hash} />{" "}
+      </label>
+      <InputResult result={hash} />
     </div>
   );
 
@@ -90,7 +92,7 @@ const Block = () => {
     <div>
       <label htmlFor="block" className={style.marginInput}>
         Blcok:
-      </label>{" "}
+      </label>
       <input
         type="number"
         id="block"
@@ -99,7 +101,7 @@ const Block = () => {
         onChange={onChangeBlock}
         key="block"
         className={style.inputData}
-      />{" "}
+      />
     </div>
   );
 
@@ -107,7 +109,7 @@ const Block = () => {
     <div>
       <label htmlFor="nonce" className={style.marginInput}>
         Nonce:
-      </label>{" "}
+      </label>
       <input
         type="text"
         id="nonce"
@@ -116,7 +118,7 @@ const Block = () => {
         onChange={onChangeNonce}
         key="nonce"
         className={style.inputData}
-      />{" "}
+      />
     </div>
   );
 
@@ -124,7 +126,7 @@ const Block = () => {
     <div>
       <label htmlFor="dataHash" className={style.marginInput}>
         Data:
-      </label>{" "}
+      </label>
       <input
         type="text"
         id="dataHash"
@@ -133,14 +135,13 @@ const Block = () => {
         onChange={onChangeHash}
         key="dataHash"
         className={style.inputData}
-      />{" "}
+      />
     </div>
   );
 
   const divInput = (
     <div>
-      {" "}
-      {inputTextBlock} {inputTextNonce} {inputTextData}{" "}
+      {inputTextBlock} {inputTextNonce} {inputTextData}
     </div>
   );
 
@@ -153,7 +154,7 @@ const Block = () => {
         childern={divInput}
         callApi={() => mineBlock()}
         color={background}
-      />{" "}
+      />
     </div>
   );
 };
