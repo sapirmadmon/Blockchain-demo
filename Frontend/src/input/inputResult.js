@@ -4,10 +4,10 @@ const InputResult = (props) => {
   return (
     <input
       type="text"
-      name="hash"
+      name={props.key}
       value={props.result}
       readOnly={true}
-      key="hash"
+      key={props.keyElement}
       className={style.notAllowed}
     />
   );

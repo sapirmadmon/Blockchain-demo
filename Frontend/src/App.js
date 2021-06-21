@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import Navbar from "./router/Navbar";
 import Block from "./blockchain/block.jsx";
+import Blockchain from "./blockchain/blockchain.jsx";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Hash from "./hash/hash";
 
@@ -29,6 +30,9 @@ function App() {
           </Route>
           <Route path="/hash">
             <Hash></Hash>
+          </Route>
+          <Route path="/blockchain">
+            <Blockchain></Blockchain>
           </Route>
         </Switch>
       </div>

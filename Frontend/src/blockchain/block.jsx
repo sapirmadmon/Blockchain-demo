@@ -84,14 +84,14 @@ const Block = () => {
       <label htmlFor="hash" className={style.marginInput}>
         Hash:
       </label>
-      <InputResult result={hash} />
+      <InputResult result={hash} keyElement="hash" />
     </div>
   );
 
   const inputTextBlock = (
     <div>
       <label htmlFor="block" className={style.marginInput}>
-        Blcok:
+        Block:
       </label>
       <input
         type="number"
