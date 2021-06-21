@@ -22,9 +22,11 @@ class CryptoBlock {
         while (
             this.hash.substring(0, difficulty) !== Array(difficulty + 1).join("0")
         ) {
+            //console.log("into while");
             this.nonce++;
             this.hash = this.computeHash();
         }
+        console.log("cur nonce: " + this.nonce);
     }
 }
 
