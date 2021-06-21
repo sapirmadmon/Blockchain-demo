@@ -5,25 +5,29 @@ const upload = require("../middleware/upload");
 const fs = require("fs");
 const CryptoBlock = require("../blockchain/block");
 let block;
+const diffculty = 3;
 
-router.get("/blockchain/block", async(req, res) => {
-    const block = new CryptoBlock("1", Date.now(), "");
-    block.mineBlock(3);
-    //const data = await websiteContent.find({});
+
+router.get("/blockchain/initBlock", async(req, res) => {
+    const index = "1";
+    block = new CryptoBlock(index, Date.now(), "");
+    block.mineBlock(diffculty);
     res.header("Access-Control-Allow-Origin", "*");
-    res.send(block);
+    res.json({
+        index: block.index,
+        nonce: block.nonce,
+        data: block.data,
+        hash: block.hash,
+    });
 });
 
 router.post("/blockchain/block", (req, res) => {
     const index = req.body.index;
     const data = req.body.data;
 
-    if (block === undefined) {
-        block = new CryptoBlock("1", Date.now(), "");
-        block.mineBlock(3);
-    } else if (index !== block.index || data !== block.data) {
+    if (index !== block.index || data !== block.data) {
         block = new CryptoBlock(index, Date.now(), data);
-        block.mineBlock(3);
+        block.mineBlock(diffculty);
     }
 
     res.header("Access-Control-Allow-Origin", "*");
@@ -39,7 +43,7 @@ router.post("/blockchain/block/mine", (req, res) => {
     const index = req.body.index;
     const data = req.body.data;
     block = new CryptoBlock(index, Date.now(), data);
-    block.mineBlock(3);
+    block.mineBlock(diffculty);
 
     res.header("Access-Control-Allow-Origin", "*");
     res.json({
