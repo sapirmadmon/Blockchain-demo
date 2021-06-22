@@ -16,7 +16,7 @@ const Block = () => {
   useEffect(() => {
     console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
 
-    axios.get("http://localhost:3030/blockchain/initBlock").then((res) => {
+    axios.get("http://localhost:3030/block/initBlock").then((res) => {
       setBlock(res.data.index);
       setNonce(res.data.nonce);
       setHash(res.data.hash);
@@ -28,17 +28,15 @@ const Block = () => {
   // on change data or block or nonce
   useEffect(() => {
     console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
-    if (ifMine) {
-      axios
-        .post("http://localhost:3030/blockchain/block", {
-          data: dataHash,
-          index: block,
-          nonce: nonce,
-        })
-        .then((res) => {
-          setHash(res.data.hash);
-        });
-    }
+    axios
+      .post("http://localhost:3030/block/getBlock", {
+        data: dataHash,
+        index: block,
+        nonce: nonce,
+      })
+      .then((res) => {
+        setHash(res.data.hash);
+      });
     console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
   }, [ifMine]);
 
@@ -47,7 +45,7 @@ const Block = () => {
     console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
 
     axios
-      .post("http://localhost:3030/blockchain/block/mine", {
+      .post("http://localhost:3030/block/mine", {
         data: dataHash,
         index: block,
         nonce: nonce,

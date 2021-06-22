@@ -2,33 +2,26 @@ const express = require("express");
 const router = express.Router();
 const CryptoBlock = require("../blockchain/block");
 const CryptoBlockchain = require("../blockchain/cryptoBlockchain");
-let blockchain = new CryptoBlockchain();
+let blockchain;
+router.get("/blockchain/initBlockchain", (req, res) => {
+  blockchain = new CryptoBlockchain();
 
-blockchain.addNewBlock(new CryptoBlock(2, "01/06/2020", ""));
-blockchain.addNewBlock(new CryptoBlock(3, "01/06/2020", ""));
-blockchain.addNewBlock(new CryptoBlock(4, "01/06/2020", ""));
-blockchain.addNewBlock(new CryptoBlock(5, "01/06/2020", ""));
-
-router.get("/blockchain/blockchain/initBlockchain", (req, res) => {
-  //const blockchain = new CryptoBlockchain();
+  blockchain.addNewBlock(new CryptoBlock(2, "01/06/2020", ""));
+  blockchain.addNewBlock(new CryptoBlock(3, "01/06/2020", ""));
+  blockchain.addNewBlock(new CryptoBlock(4, "01/06/2020", ""));
+  blockchain.addNewBlock(new CryptoBlock(5, "01/06/2020", ""));
   res.header("Access-Control-Allow-Origin", "*");
   res.send(blockchain);
 });
 
-router.post("/blockchain/blockchain", (req, res) => {
-  //const index = req.body.index;
-  //const data = req.body.data;
-  //if (block === undefined) {
-  //    block = new CryptoBlock("1", Date.now(), "");
-  //    block.mineBlock(3);
+router.post("/blockchain/getBlockchain", (req, res) => {
   const newBlock = req.body.newBlock;
   blockchain.changeBlockchain(newBlock);
-  //changeBlockchain(blockchain);
   res.header("Access-Control-Allow-Origin", "*");
   res.send(blockchain);
 });
 
-router.post("/blockchain/blockchain/mine", (req, res) => {
+router.post("/blockchain/mine", (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   const newBlock = req.body.newBlock;
   console.log(newBlock);
