@@ -92,11 +92,15 @@ const Blockchain = () => {
         result={blockArr[index].precedingHash}
         keyElement={index + "prev"}
       />
-
-      <label htmlFor="hash" className={style.marginInput}>
-        Hash:
-      </label>
-      <InputResult result={blockArr[index].hash} keyElement={index + "hash"} />
+      <p>
+        <label htmlFor="hash" className={style.marginInput}>
+          Hash:
+        </label>
+        <InputResult
+          result={blockArr[index].hash}
+          keyElement={index + "hash"}
+        />
+      </p>
     </div>
   );
 
@@ -160,7 +164,7 @@ const Blockchain = () => {
   );
 
   const cards = (
-    <div>
+    <div class="row flex-nowrap">
       {blockArr.map((block, index) => (
         <Card
           hiddenButton={false}
@@ -170,7 +174,7 @@ const Blockchain = () => {
           callApi={() => mineBlock(index)}
           color={block.background}
           key={index}
-        />
+        ></Card>
       ))}
     </div>
   );
