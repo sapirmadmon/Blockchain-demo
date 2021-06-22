@@ -1,5 +1,5 @@
 import style from "./block.module.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Card from "../card/card";
 import InputResult from "../input/inputResult";
 import axios from "axios";
@@ -48,29 +48,32 @@ const Blockchain = () => {
       });
   }, [ifMine]);
 
-  const mineBlock = (indexBlock) => {
-    axios
-      .post("http://localhost:3030/blockchain/mine", {
-        newBlock: {
-          numBlock: indexBlock,
-          data: blockArr[indexBlock].data,
-          nonce: blockArr[indexBlock].nonce,
-          index: blockArr[indexBlock].index,
-        },
-      })
-      .then((res) => {
-        const netBlockArr = res.data.blockchain.map((block, index) => {
-          if (index > indexBlock) {
-            block.background = false;
-          } else {
-            block.background = true;
-          }
-          return block;
-        });
+  const mineBlock = useCallback(
+    (indexBlock) => {
+      axios
+        .post("http://localhost:3030/blockchain/mine", {
+          newBlock: {
+            numBlock: indexBlock,
+            data: blockArr[indexBlock].data,
+            nonce: blockArr[indexBlock].nonce,
+            index: blockArr[indexBlock].index,
+          },
+        })
+        .then((res) => {
+          const netBlockArr = res.data.blockchain.map((block, index) => {
+            if (index > indexBlock) {
+              block.background = false;
+            } else {
+              block.background = true;
+            }
+            return block;
+          });
 
-        setBlockArr(netBlockArr);
-      });
-  };
+          setBlockArr(netBlockArr);
+        });
+    },
+    [blockArr]
+  );
 
   const onChangeValue = (e, index, value) => {
     setIfMine(!ifMine);

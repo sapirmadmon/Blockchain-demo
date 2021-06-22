@@ -22,7 +22,6 @@ class CryptoBlockchain {
     this.blockchain[newBlock.numBlock].data = newBlock.data;
     this.blockchain[newBlock.numBlock].index = newBlock.index;
     this.blockchain[newBlock.numBlock].nonce = newBlock.nonce;
-    console.log(this.blockchain);
     for (let i = newBlock.numBlock; i < this.blockchain.length; i++) {
       if (i === 0) {
         this.blockchain[i].precedingHash = 0;
@@ -32,7 +31,6 @@ class CryptoBlockchain {
         this.blockchain[i].hash = this.blockchain[i].computeHash();
       }
     }
-    console.log(this.blockchain);
   }
 
   mineBlockchain(newBlock) {
