@@ -11,7 +11,7 @@ const Hasa = () => {
   //after render to DOM
   useEffect(() => {
     axios
-      .post("http://localhost:3030/blockchain/hash", { data: dataHash })
+      .post("http://localhost:3030/hash", { data: dataHash })
       .then((res) => setHash(res.data));
   }, [dataHash]);
 

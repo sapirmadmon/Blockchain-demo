@@ -1,38 +1,86 @@
 import style from "./block.module.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Card from "../card/card";
 import InputResult from "../input/inputResult";
 import axios from "axios";
 
 const Blockchain = () => {
   const [blockArr, setBlockArr] = useState([]);
-  const [background, SetBackground] = useState(true);
   const [ifMine, setIfMine] = useState(false);
 
   //init block
   useEffect(() => {
     let arrOfBlock;
-    axios
-      .get("http://localhost:3030/blockchain/blockchain/initBlockchain")
-      .then((res) => {
-        arrOfBlock = res.data.blockchain.reduce(
-          (prev, current) => [...prev, current],
-          []
-        );
-        setBlockArr(arrOfBlock);
-      });
+    axios.get("http://localhost:3030/blockchain/initBlockchain").then((res) => {
+      arrOfBlock = res.data.blockchain.reduce((prev, current) => {
+        current.background = true;
+        return [...prev, current];
+      }, []);
+      setBlockArr(arrOfBlock);
+    });
   }, []);
 
-  const mineBlock = (index) => {
-    SetBackground(true);
-  };
+  // on change data or block or nonce
+  useEffect(() => {
+    const indexBlock = blockArr.findIndex(
+      (block) => block.background === false
+    );
+    if (indexBlock === -1) return;
+    axios
+      .post("http://localhost:3030/blockchain/getBlockchain", {
+        newBlock: {
+          numBlock: indexBlock,
+          data: blockArr[indexBlock].data,
+          nonce: blockArr[indexBlock].nonce,
+          index: blockArr[indexBlock].index,
+        },
+      })
+      .then((res) => {
+        const blockchain = res.data.blockchain.map((block, index) => {
+          if (index >= indexBlock) {
+            block.background = false;
+          } else {
+            block.background = true;
+          }
+          return block;
+        });
+        setBlockArr(blockchain);
+      });
+  }, [ifMine]);
+
+  const mineBlock = useCallback(
+    (indexBlock) => {
+      axios
+        .post("http://localhost:3030/blockchain/mine", {
+          newBlock: {
+            numBlock: indexBlock,
+            data: blockArr[indexBlock].data,
+            nonce: blockArr[indexBlock].nonce,
+            index: blockArr[indexBlock].index,
+          },
+        })
+        .then((res) => {
+          const netBlockArr = res.data.blockchain.map((block, index) => {
+            if (index > indexBlock) {
+              block.background = false;
+            } else {
+              block.background = true;
+            }
+            return block;
+          });
+
+          setBlockArr(netBlockArr);
+        });
+    },
+    [blockArr]
+  );
 
   const onChangeValue = (e, index, value) => {
     setIfMine(!ifMine);
     const copyBlockArr = [...blockArr];
     copyBlockArr[index][value] = e.target.value;
+    copyBlockArr[index].background = false;
     setBlockArr(copyBlockArr);
-    SetBackground(false);
   };
 
   const inputResult = (index) => (
@@ -95,8 +143,8 @@ const Blockchain = () => {
         type="text"
         id={index + "dataHash"}
         name="dataHash"
-        value={blockArr[index].dataHash}
-        onChange={(e) => onChangeValue(e, index, "dataHash")}
+        value={blockArr[index].data}
+        onChange={(e) => onChangeValue(e, index, "data")}
         key={index + "dataHash"}
         className={style.inputData}
       />
@@ -114,19 +162,15 @@ const Blockchain = () => {
   const cards = (
     <div>
       {blockArr.map((block, index) => (
-        <div>
-          <div>
-            <Card
-              hiddenButton={false}
-              title=""
-              result={inputResult(index)}
-              childern={divInput(index)}
-              callApi={() => mineBlock(index)}
-              color={block.background}
-              key={index}
-            />
-          </div>
-        </div>
+        <Card
+          hiddenButton={false}
+          title=""
+          result={inputResult(index)}
+          childern={divInput(index)}
+          callApi={() => mineBlock(index)}
+          color={block.background}
+          key={index}
+        />
       ))}
     </div>
   );
