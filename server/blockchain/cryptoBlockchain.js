@@ -40,14 +40,11 @@ class CryptoBlockchain {
     this.blockchain[newBlock.numBlock].index = newBlock.index;
     this.blockchain[newBlock.numBlock].nonce = newBlock.nonce;
 
-    console.log(this.blockchain[newBlock.numBlock].nonce);
     this.blockchain[newBlock.numBlock].mineBlock(3);
-    console.log(this.blockchain[newBlock.numBlock].nonce);
-    //console.log(this.blockchain[newBlock.numBlock]);
+
     for (let i = newBlock.numBlock + 1; i < this.blockchain.length; i++) {
       this.blockchain[i].precedingHash = this.blockchain[i - 1].hash;
       this.blockchain[i].hash = this.blockchain[i].computeHash();
-      //  console.log(this.blockchain[i]);
     }
   }
 }

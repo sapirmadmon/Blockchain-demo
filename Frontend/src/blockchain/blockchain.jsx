@@ -48,10 +48,28 @@ const Blockchain = () => {
       });
   }, [ifMine]);
 
-  const mineBlock = (index) => {
-    const copyBlockArr = [...blockArr];
-    copyBlockArr[index].background = true;
-    setBlockArr(copyBlockArr);
+  const mineBlock = (indexBlock) => {
+    axios
+      .post("http://localhost:3030/blockchain/mine", {
+        newBlock: {
+          numBlock: indexBlock,
+          data: blockArr[indexBlock].data,
+          nonce: blockArr[indexBlock].nonce,
+          index: blockArr[indexBlock].index,
+        },
+      })
+      .then((res) => {
+        const netBlockArr = res.data.blockchain.map((block, index) => {
+          if (index > indexBlock) {
+            block.background = false;
+          } else {
+            block.background = true;
+          }
+          return block;
+        });
+
+        setBlockArr(netBlockArr);
+      });
   };
 
   const onChangeValue = (e, index, value) => {
