@@ -1,35 +1,35 @@
 .title {
-  text-align: center;
+    text-align: center;
 }
 
 .spaceDiv {
-  padding-left: 15px;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  margin-top: 20px;
+    padding-left: 15px;
+    /*padding-top: 15px;*/
+    padding-bottom: 15px;
+    /*margin-top: 20px;*/
 }
 
 .cardSpace {
-  margin: 0 auto;
+    margin: 10px;
+    width: 75%;
 }
 
 .result {
-  padding-left: 15px;
-  margin-top: 50px;
-  padding-top: 50px;
+    padding-left: 15px;
+    /*margin-top: 50px;*/
+    /*padding-top: 50px;*/
 }
 
-.buttonMine {
-}
+.buttonMine {}
 
 .errorBackround {
-  background-color: rgb(250, 220, 220) !important;
+    background-color: rgb(250, 220, 220) !important;
 }
 
 .backGround {
-  background-color: rgb(223, 240, 216) !important;
+    background-color: rgb(223, 240, 216) !important;
 }
 
 .card {
-  background-color: rgb(223, 240, 216) !important;
+    background-color: rgb(223, 240, 216) !important;
 }

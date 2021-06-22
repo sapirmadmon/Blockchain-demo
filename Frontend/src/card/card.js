@@ -16,22 +16,20 @@ const CardHOC = (props) => {
         <
         Card.Body >
         <
-        Card.Title className = { style.title } > { props.title } < /Card.Title>
-
-        <
-        div className = { style.spaceDiv } > { props.childern } < /div> <
-        div className = { `${style.spaceDiv}  ${style.result}` } > { props.result } <
-        /div> <
-        /Card.Body> <
+        Card.Title className = { style.title } > { props.title } < /Card.Title>{" "} <
+        div className = { style.spaceDiv } > { props.childern } < /div>{" "} <
+        div className = { `${style.spaceDiv}  ${style.result}` } > { " " } { props.result } { " " } <
+        /div>{" "} <
+        /Card.Body>{" "} <
         Card.Footer >
         <
         Button variant = "primary"
         className = { style.buttonMine }
         hidden = { props.hiddenButton && hidden }
         onClick = { props.callApi } >
-        Mine <
-        /Button> <
-        /Card.Footer> <
+        Mine { " " } <
+        /Button>{" "} <
+        /Card.Footer>{" "} <
         /Card>
     );
 };
