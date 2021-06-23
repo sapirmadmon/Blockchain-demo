@@ -104,6 +104,23 @@ const Blockchain = () => {
     </div>
   );
 
+  const createInput = (index, keyValue, type) => (
+    <div class="row flex-nowrap">
+      <label htmlFor={index + keyValue} className={style.marginInput}>
+        {keyValue.substring(0, 1).toUpperCase() + keyValue.substring(1)}:
+      </label>
+      <input
+        type={type}
+        id={index + keyValue}
+        name={keyValue}
+        value={blockArr[index][keyValue]}
+        onChange={(e) => onChangeValue(e, index, keyValue)}
+        key={index + keyValue}
+        className={style.inputData}
+      />
+    </div>
+  );
+
   const inputTextBlock = (index) => (
     <div class="row flex-nowrap">
       <label htmlFor="block" className={style.marginInput}>
@@ -157,9 +174,9 @@ const Blockchain = () => {
 
   const divInput = (index) => (
     <div>
-      {inputTextBlock(index)}
-      {inputTextNonce(index)}
-      {inputTextData(index)}
+      {createInput(index, "index", "number")}
+      {createInput(index, "nonce", "number")}
+      {createInput(index, "data", "text")}
     </div>
   );
 

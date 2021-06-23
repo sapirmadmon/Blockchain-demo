@@ -36,8 +36,7 @@ class CryptoBlockchain {
   mineBlockchain(newBlock) {
     this.blockchain[newBlock.numBlock].data = newBlock.data;
     this.blockchain[newBlock.numBlock].index = newBlock.index;
-    this.blockchain[newBlock.numBlock].nonce = newBlock.nonce;
-
+    this.blockchain[newBlock.numBlock].nonce = 0;
     this.blockchain[newBlock.numBlock].mineBlock(3);
 
     for (let i = newBlock.numBlock + 1; i < this.blockchain.length; i++) {

@@ -1,5 +1,5 @@
 import style from "./block.module.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Card from "../card/card";
 import InputResult from "../input/inputResult";
 import axios from "axios";
@@ -11,19 +11,6 @@ const Block = () => {
   const [nonce, setNonce] = useState("");
   const [background, SetBackground] = useState(true);
   const [ifMine, setIfMine] = useState(false);
-
-  //init block
-  useEffect(() => {
-    console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
-
-    axios.get("http://localhost:3030/block/initBlock").then((res) => {
-      setBlock(res.data.index);
-      setNonce(res.data.nonce);
-      setHash(res.data.hash);
-      setDataHash(res.data.data);
-    });
-    console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
-  }, []);
 
   // on change data or block or nonce
   useEffect(() => {
@@ -40,7 +27,19 @@ const Block = () => {
     console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
   }, [ifMine]);
 
-  const mineBlock = () => {
+  //init block
+  useEffect(() => {
+    console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
+    axios.get("http://localhost:3030/block/initBlock").then((res) => {
+      setBlock(res.data.index);
+      setNonce(res.data.nonce);
+      setHash(res.data.hash);
+      setDataHash(res.data.data);
+    });
+    console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
+  }, []);
+
+  const mineBlock = useCallback(() => {
     SetBackground(true);
     console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
 
@@ -57,9 +56,9 @@ const Block = () => {
         setHash(res.data.hash);
       });
     console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
-  };
+  }, [dataHash, block, nonce]);
 
-  const onChangeHash = (e) => {
+  const onChangeData = (e) => {
     setIfMine(!ifMine);
     setDataHash(e.target.value);
     SetBackground(false);
@@ -130,7 +129,7 @@ const Block = () => {
         id="dataHash"
         name="dataHash"
         value={dataHash}
-        onChange={onChangeHash}
+        onChange={onChangeData}
         key="dataHash"
         className={style.inputData}
       />
