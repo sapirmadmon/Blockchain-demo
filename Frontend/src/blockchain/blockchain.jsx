@@ -105,7 +105,7 @@ const Blockchain = () => {
   );
 
   const inputTextBlock = (index) => (
-    <div>
+    <div class="row flex-nowrap">
       <label htmlFor="block" className={style.marginInput}>
         Block:
       </label>
@@ -122,7 +122,7 @@ const Blockchain = () => {
   );
 
   const inputTextNonce = (index) => (
-    <div>
+    <div class="row flex-nowrap">
       <label htmlFor="nonce" className={style.marginInput}>
         Nonce:
       </label>
@@ -139,7 +139,7 @@ const Blockchain = () => {
   );
 
   const inputTextData = (index) => (
-    <div>
+    <div class="row flex-nowrap">
       <label htmlFor="dataHash" className={style.marginInput}>
         Data:
       </label>
