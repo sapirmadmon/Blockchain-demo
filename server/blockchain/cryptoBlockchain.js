@@ -37,7 +37,10 @@ class CryptoBlockchain {
     this.blockchain[newBlock.numBlock].data = newBlock.data;
     this.blockchain[newBlock.numBlock].index = newBlock.index;
     this.blockchain[newBlock.numBlock].nonce = 0;
-    this.blockchain[newBlock.numBlock].mineBlock(3);
+    const computeMoreThanOne = this.blockchain[newBlock.numBlock].mineBlock(3);
+    if (!computeMoreThanOne) {
+      this.blockchain[newBlock.numBlock].nonce = newBlock.nonce;
+    }
 
     for (let i = newBlock.numBlock + 1; i < this.blockchain.length; i++) {
       this.blockchain[i].precedingHash = this.blockchain[i - 1].hash;
