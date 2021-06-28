@@ -4,22 +4,25 @@ const CryptoBlock = require("../blockchain/block");
 const CryptoBlockchain = require("../blockchain/cryptoBlockchain");
 let arrBlockchain = [];
 
+const initBlockchain = () => {
+  const blockchain = new CryptoBlockchain();
+
+  blockchain.addNewBlock(new CryptoBlock(2, "01/06/2020", ""));
+  blockchain.addNewBlock(new CryptoBlock(3, "01/06/2020", ""));
+  blockchain.addNewBlock(new CryptoBlock(4, "01/06/2020", ""));
+  blockchain.addNewBlock(new CryptoBlock(5, "01/06/2020", ""));
+  return blockchain;
+};
+
 const initBlockchainArr = () => {
-  let blockchain;
-
   for (let i = 0; i < 4; i++) {
-    blockchain = new CryptoBlockchain();
-
-    blockchain.addNewBlock(new CryptoBlock(2, "01/06/2020", ""));
-    blockchain.addNewBlock(new CryptoBlock(3, "01/06/2020", ""));
-    blockchain.addNewBlock(new CryptoBlock(4, "01/06/2020", ""));
-    blockchain.addNewBlock(new CryptoBlock(5, "01/06/2020", ""));
-    arrBlockchain.push(blockchain);
+    arrBlockchain.push(initBlockchain());
   }
 };
 initBlockchainArr();
 
 router.get("/blockchain/initBlockchain", (req, res) => {
+  arrBlockchain[0] = initBlockchain();
   res.header("Access-Control-Allow-Origin", "*");
   res.send(arrBlockchain[0]);
 });
