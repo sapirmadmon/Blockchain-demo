@@ -3,12 +3,11 @@ import Blockchain from "./blockchain";
 
 const distributedBlockchain = () => {
   const numDistributed = 3;
+  const route = "blockchain/distributed/initBlockchain";
 
   return (
     <div>
-      <Blockchain key={1}></Blockchain>
-      <Blockchain key={2}></Blockchain>
-      <Blockchain key={3}></Blockchain>
+      <Blockchain indexBlockchain={1} route={route} />
     </div>
   );
 };

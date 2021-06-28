@@ -4,14 +4,18 @@ import Card from "../card/card";
 import InputResult from "../input/inputResult";
 import axios from "axios";
 
-const Blockchain = () => {
+const Blockchain = (props) => {
   const [blockArr, setBlockArr] = useState([]);
+  const indexBlockchain =
+    props.indexBlockchain !== undefined ? props.indexBlockchain : 0;
+  const routeInit =
+    props.route !== undefined ? props.route : "blockchain/initBlockchain";
   const [ifMine, setIfMine] = useState(false);
-
+  console.log(props.route);
   //init block
   useEffect(() => {
     let arrOfBlock;
-    axios.get("http://localhost:3030/blockchain/initBlockchain").then((res) => {
+    axios.get("http://localhost:3030/" + routeInit).then((res) => {
       arrOfBlock = res.data.blockchain.reduce((prev, current) => {
         current.background = true;
         return [...prev, current];
@@ -34,6 +38,7 @@ const Blockchain = () => {
           nonce: blockArr[indexBlock].nonce,
           index: blockArr[indexBlock].index,
         },
+        indexBlockchain: indexBlockchain,
       })
       .then((res) => {
         const blockchain = res.data.blockchain.map((block, index) => {
@@ -50,6 +55,9 @@ const Blockchain = () => {
 
   const mineBlock = useCallback(
     (indexBlock) => {
+      if (blockArr[indexBlock].background) {
+        return;
+      }
       axios
         .post("http://localhost:3030/blockchain/mine", {
           newBlock: {
@@ -57,14 +65,18 @@ const Blockchain = () => {
             data: blockArr[indexBlock].data,
             nonce: blockArr[indexBlock].nonce,
             index: blockArr[indexBlock].index,
+            indexBlockchain: indexBlockchain,
           },
+          indexBlockchain: indexBlockchain,
         })
         .then((res) => {
           const netBlockArr = res.data.blockchain.map((block, index) => {
-            if (index > indexBlock) {
+            if (index === indexBlock) {
+              block.background = true;
+            } else if (index > indexBlock) {
               block.background = false;
             } else {
-              block.background = true;
+              block.background = blockArr[index].background;
             }
             return block;
           });
