@@ -22,6 +22,17 @@ class CryptoBlockchain {
     this.blockchain[newBlock.numBlock].data = newBlock.data;
     this.blockchain[newBlock.numBlock].index = newBlock.index;
     this.blockchain[newBlock.numBlock].nonce = newBlock.nonce;
+    const copyBlock = new CryptoBlock(
+      newBlock.index,
+      "01/06/2020",
+      newBlock.data,
+      this.blockchain[newBlock.numBlock].precedingHash,
+      this.blockchain[newBlock.numBlock].nonce
+    );
+    copyBlock.mineBlock(3);
+    if (copyBlock.hash == this.blockchain[newBlock.numBlock].computeHash()) {
+      console.log("correct hash");
+    }
     for (let i = newBlock.numBlock; i < this.blockchain.length; i++) {
       if (i === 0) {
         this.blockchain[i].precedingHash = 0;

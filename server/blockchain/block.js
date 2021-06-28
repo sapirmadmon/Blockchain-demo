@@ -6,8 +6,8 @@ class CryptoBlock {
     this.timestamp = timestamp;
     this.data = data;
     this.precedingHash = precedingHash;
-    this.hash = this.computeHash();
     this.nonce = nonce;
+    this.hash = this.computeHash();
   }
   computeHash() {
     return SHA256(

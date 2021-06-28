@@ -7,7 +7,7 @@ const distributedBlockchain = () => {
 
   return (
     <div>
-      <Blockchain indexBlockchain={1} route={route} />
+      <Blockchain indexBlockchain={1} route1={route} />
     </div>
   );
 };

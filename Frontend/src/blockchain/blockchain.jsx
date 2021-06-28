@@ -9,9 +9,9 @@ const Blockchain = (props) => {
   const indexBlockchain =
     props.indexBlockchain !== undefined ? props.indexBlockchain : 0;
   const routeInit =
-    props.route !== undefined ? props.route : "blockchain/initBlockchain";
+    props.route !== undefined ? props.route1 : "blockchain/initBlockchain";
   const [ifMine, setIfMine] = useState(false);
-  console.log(props.route);
+  console.log(props.route1);
   //init block
   useEffect(() => {
     let arrOfBlock;
