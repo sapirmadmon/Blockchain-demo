@@ -14,6 +14,7 @@ const Block = () => {
 
   // on change data or block or nonce
   useEffect(() => {
+    console.log("before: " + nonce);
     axios
       .post("http://localhost:3030/block/getBlock", {
         data: dataHash,
@@ -22,7 +23,9 @@ const Block = () => {
       })
       .then((res) => {
         setHash(res.data.hash);
+        SetBackground(res.data.isMine);
       });
+    console.log("after: " + nonce);
   }, [ifMine]);
 
   //init block
@@ -32,12 +35,11 @@ const Block = () => {
       setNonce(res.data.nonce);
       setHash(res.data.hash);
       setDataHash(res.data.data);
+      SetBackground(res.data.isMine);
     });
   }, []);
 
   const mineBlock = useCallback(() => {
-    SetBackground(true);
-
     axios
       .post("http://localhost:3030/block/mine", {
         data: dataHash,
@@ -49,25 +51,23 @@ const Block = () => {
         setNonce(res.data.nonce);
         setDataHash(res.data.data);
         setHash(res.data.hash);
+        SetBackground(res.data.isMine);
       });
   }, [dataHash, block, nonce]);
 
   const onChangeData = (e) => {
     setIfMine(!ifMine);
     setDataHash(e.target.value);
-    SetBackground(false);
   };
 
   const onChangeNonce = (e) => {
     setIfMine(!ifMine);
     setNonce(e.target.value);
-    SetBackground(false);
   };
 
   const onChangeBlock = (e) => {
     setIfMine(!ifMine);
     setBlock(e.target.value);
-    SetBackground(false);
   };
 
   const inputResult = (

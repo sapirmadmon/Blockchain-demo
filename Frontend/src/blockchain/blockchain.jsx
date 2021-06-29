@@ -8,8 +8,7 @@ const Blockchain = (props) => {
   const [blockArr, setBlockArr] = useState([]);
   const indexBlockchain =
     props.indexBlockchain !== undefined ? props.indexBlockchain : 0;
-  const [ifMine, setIfMine] = useState(false);
-  console.log(props.indexBlockchain);
+
   //init block
   useEffect(() => {
     let arrOfBlock;
@@ -21,7 +20,7 @@ const Blockchain = (props) => {
       })
       .then((res) => {
         arrOfBlock = res.data.blockchain.reduce((prev, current) => {
-          current.background = true;
+          current.background = current.isMine;
           return [...prev, current];
         }, []);
         setBlockArr(arrOfBlock);
@@ -29,39 +28,31 @@ const Blockchain = (props) => {
   }, []);
 
   // on change data or block or nonce
-  useEffect(() => {
-    const indexBlock = blockArr.findIndex(
-      (block) => block.background === false
-    );
-    if (indexBlock === -1) return;
-    axios
-      .post("http://localhost:3030/blockchain/getBlockchain", {
-        newBlock: {
-          numBlock: indexBlock,
-          data: blockArr[indexBlock].data,
-          nonce: blockArr[indexBlock].nonce,
-          index: blockArr[indexBlock].index,
-        },
-        indexBlockchain: indexBlockchain,
-      })
-      .then((res) => {
-        const blockchain = res.data.blockchain.map((block, index) => {
-          if (index >= indexBlock) {
-            block.background = false;
-          } else {
-            block.background = true;
-          }
-          return block;
+  const getBlock = useCallback(
+    (indexBlock) => {
+      axios
+        .post("http://localhost:3030/blockchain/getBlockchain", {
+          newBlock: {
+            numBlock: indexBlock,
+            data: blockArr[indexBlock].data,
+            nonce: blockArr[indexBlock].nonce,
+            index: blockArr[indexBlock].index,
+          },
+          indexBlockchain: indexBlockchain,
+        })
+        .then((res) => {
+          const blockchain = res.data.blockchain.map((block, index) => {
+            block.background = block.isMine;
+            return block;
+          });
+          setBlockArr(blockchain);
         });
-        setBlockArr(blockchain);
-      });
-  }, [ifMine]);
+    },
+    [blockArr]
+  );
 
   const mineBlock = useCallback(
     (indexBlock) => {
-      if (blockArr[indexBlock].background) {
-        return;
-      }
       axios
         .post("http://localhost:3030/blockchain/mine", {
           newBlock: {
@@ -75,13 +66,7 @@ const Blockchain = (props) => {
         })
         .then((res) => {
           const netBlockArr = res.data.blockchain.map((block, index) => {
-            if (index === indexBlock) {
-              block.background = true;
-            } else if (index > indexBlock) {
-              block.background = false;
-            } else {
-              block.background = blockArr[index].background;
-            }
+            block.background = block.isMine;
             return block;
           });
 
@@ -92,11 +77,9 @@ const Blockchain = (props) => {
   );
 
   const onChangeValue = (e, index, value) => {
-    setIfMine(!ifMine);
     const copyBlockArr = [...blockArr];
     copyBlockArr[index][value] = e.target.value;
-    copyBlockArr[index].background = false;
-    setBlockArr(copyBlockArr);
+    getBlock(index);
   };
 
   const inputResult = (index) => (
