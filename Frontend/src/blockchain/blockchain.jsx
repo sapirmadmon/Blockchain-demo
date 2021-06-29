@@ -108,15 +108,10 @@ const Blockchain = (props) => {
         result={blockArr[index].precedingHash}
         keyElement={index + "prev"}
       />
-      <p>
-        <label htmlFor="hash" className={style.marginInput}>
-          Hash:
-        </label>
-        <InputResult
-          result={blockArr[index].hash}
-          keyElement={index + "hash"}
-        />
-      </p>
+      <label htmlFor="hash" className={style.marginInput}>
+        Hash:
+      </label>
+      <InputResult result={blockArr[index].hash} keyElement={index + "hash"} />
     </div>
   );
 
