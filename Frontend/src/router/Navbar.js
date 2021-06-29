@@ -2,7 +2,14 @@ import "./Navbar.css";
 import { Link } from "react-router-dom";
 
 function Navbar(props) {
-  const linksArr = ["Hash", "Block", "Blockchain", "Distributed"];
+  const linksArr = [
+    "Hash",
+    "Block",
+    "Blockchain",
+    "Distributed",
+    "Tokens",
+    "Coinbase",
+  ];
   return (
     <div>
       <ul id="nav">
@@ -12,11 +19,6 @@ function Navbar(props) {
         {linksArr.map((link, index) => (
           <li key={index}>
             <Link to={"/" + link}>{link}</Link>
-          </li>
-        ))}
-        {props.listCityName.map((cityName) => (
-          <li key={cityName}>
-            <Link to={"/" + cityName}>{cityName}</Link>
           </li>
         ))}
       </ul>

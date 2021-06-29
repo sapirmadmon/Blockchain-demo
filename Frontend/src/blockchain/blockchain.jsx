@@ -137,57 +137,6 @@ const Blockchain = (props) => {
     </div>
   );
 
-  const inputTextBlock = (index) => (
-    <div class="row flex-nowrap">
-      <label htmlFor="block" className={style.marginInput}>
-        Block:
-      </label>
-      <input
-        type="number"
-        id={index + "block"}
-        name="block"
-        value={blockArr[index].index}
-        onChange={(e) => onChangeValue(e, index, "index")}
-        key={index + "block"}
-        className={style.inputData}
-      />
-    </div>
-  );
-
-  const inputTextNonce = (index) => (
-    <div class="row flex-nowrap">
-      <label htmlFor="nonce" className={style.marginInput}>
-        Nonce:
-      </label>
-      <input
-        type="text"
-        id={index + "nonce"}
-        name="nonce"
-        value={blockArr[index].nonce}
-        onChange={(e) => onChangeValue(e, index, "nonce")}
-        key={index + "nonce"}
-        className={style.inputData}
-      />
-    </div>
-  );
-
-  const inputTextData = (index) => (
-    <div class="row flex-nowrap">
-      <label htmlFor="dataHash" className={style.marginInput}>
-        Data:
-      </label>
-      <input
-        type="text"
-        id={index + "dataHash"}
-        name="dataHash"
-        value={blockArr[index].data}
-        onChange={(e) => onChangeValue(e, index, "data")}
-        key={index + "dataHash"}
-        className={style.inputData}
-      />
-    </div>
-  );
-
   const divInput = (index) => (
     <div>
       {createInput(index, "index", "number")}
