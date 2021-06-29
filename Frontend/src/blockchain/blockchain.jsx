@@ -8,20 +8,24 @@ const Blockchain = (props) => {
   const [blockArr, setBlockArr] = useState([]);
   const indexBlockchain =
     props.indexBlockchain !== undefined ? props.indexBlockchain : 0;
-  const routeInit =
-    props.route !== undefined ? props.route1 : "blockchain/initBlockchain";
   const [ifMine, setIfMine] = useState(false);
-  console.log(props.route1);
+  console.log(props.indexBlockchain);
   //init block
   useEffect(() => {
     let arrOfBlock;
-    axios.get("http://localhost:3030/" + routeInit).then((res) => {
-      arrOfBlock = res.data.blockchain.reduce((prev, current) => {
-        current.background = true;
-        return [...prev, current];
-      }, []);
-      setBlockArr(arrOfBlock);
-    });
+    axios
+      .get("http://localhost:3030/blockchain/initBlockchain", {
+        params: {
+          indexBlockchain: indexBlockchain,
+        },
+      })
+      .then((res) => {
+        arrOfBlock = res.data.blockchain.reduce((prev, current) => {
+          current.background = true;
+          return [...prev, current];
+        }, []);
+        setBlockArr(arrOfBlock);
+      });
   }, []);
 
   // on change data or block or nonce

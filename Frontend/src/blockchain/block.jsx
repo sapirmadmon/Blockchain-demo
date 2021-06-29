@@ -14,7 +14,6 @@ const Block = () => {
 
   // on change data or block or nonce
   useEffect(() => {
-    console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
     axios
       .post("http://localhost:3030/block/getBlock", {
         data: dataHash,
@@ -24,24 +23,20 @@ const Block = () => {
       .then((res) => {
         setHash(res.data.hash);
       });
-    console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
   }, [ifMine]);
 
   //init block
   useEffect(() => {
-    console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
     axios.get("http://localhost:3030/block/initBlock").then((res) => {
       setBlock(res.data.index);
       setNonce(res.data.nonce);
       setHash(res.data.hash);
       setDataHash(res.data.data);
     });
-    console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
   }, []);
 
   const mineBlock = useCallback(() => {
     SetBackground(true);
-    console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
 
     axios
       .post("http://localhost:3030/block/mine", {
@@ -55,7 +50,6 @@ const Block = () => {
         setDataHash(res.data.data);
         setHash(res.data.hash);
       });
-    console.log({ data: dataHash, block: block, nonce: nonce, hash: hash });
   }, [dataHash, block, nonce]);
 
   const onChangeData = (e) => {

@@ -16,15 +16,16 @@ const initBlockchain = () => {
 
 const initBlockchainArr = () => {
   for (let i = 0; i < 4; i++) {
-    arrBlockchain.push(initBlockchain());
+    arrBlockchain[i] = initBlockchain();
   }
 };
 initBlockchainArr();
 
 router.get("/blockchain/initBlockchain", (req, res) => {
-  arrBlockchain[0] = initBlockchain();
+  initBlockchainArr();
+  const index = req.query.indexBlockchain;
   res.header("Access-Control-Allow-Origin", "*");
-  res.send(arrBlockchain[0]);
+  res.send(arrBlockchain[index]);
 });
 
 router.get("/blockchain/distributed/initBlockchain", (req, res) => {

@@ -1,13 +1,18 @@
 import React from "react";
 import Blockchain from "./blockchain";
+import style from "./block.module.css";
 
 const distributedBlockchain = () => {
-  const numDistributed = 3;
-  const route = "blockchain/distributed/initBlockchain";
-
+  const indexArrBlock = ["A", "B", "C"];
   return (
     <div>
-      <Blockchain indexBlockchain={1} route1={route} />
+      <div></div>
+      {indexArrBlock.map((value, index) => (
+        <div key={index + 1}>
+          <div className={style.subTitle}>Peer {value}</div>
+          <Blockchain indexBlockchain={index + 1} key={value} />
+        </div>
+      ))}
     </div>
   );
 };

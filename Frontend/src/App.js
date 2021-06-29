@@ -4,6 +4,7 @@ import axios from "axios";
 import Navbar from "./router/Navbar";
 import Block from "./blockchain/block.jsx";
 import Blockchain from "./blockchain/blockchain.jsx";
+import DistributedBlockchain from "./blockchain/distributedBlockchain.jsx";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Hash from "./hash/hash";
 
@@ -35,7 +36,7 @@ function App() {
             <Blockchain></Blockchain>
           </Route>
           <Route path="/distributed">
-            <Blockchain></Blockchain>
+            <DistributedBlockchain />
           </Route>
         </Switch>
       </div>
