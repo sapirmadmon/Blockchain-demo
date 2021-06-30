@@ -14,7 +14,6 @@ const Block = () => {
 
   // on change data or block or nonce
   useEffect(() => {
-    console.log("before: " + nonce);
     axios
       .post("http://localhost:3030/block/getBlock", {
         data: dataHash,
@@ -25,7 +24,6 @@ const Block = () => {
         setHash(res.data.hash);
         SetBackground(res.data.isMine);
       });
-    console.log("after: " + nonce);
   }, [ifMine]);
 
   //init block
