@@ -13,6 +13,7 @@
   margin: 10px;
   width: 75%;
   min-width: fit-content;
+  word-wrap: normal !important;
 }
 
 .errorBackround {
