@@ -84,23 +84,42 @@ const Blockchain = (props) => {
 
   const inputResult = (index) => (
     <div>
-      <label htmlFor="precedingHash" className={style.marginInput}>
-        prev:
-      </label>
-      <InputResult
-        result={blockArr[index].precedingHash}
-        keyElement={index + "prev"}
-      />
-      <label htmlFor="hash" className={style.marginInput}>
-        Hash:
-      </label>
-      <InputResult result={blockArr[index].hash} keyElement={index + "hash"} />
+      <div class="row flex-nowrap">
+        <label
+          htmlFor={index + "precedingHash"}
+          className={style.marginInput}
+          class="col-md-3"
+        >
+          prev:
+        </label>
+        <InputResult
+          result={blockArr[index].precedingHash}
+          keyElement={index + "precedingHash"}
+        />
+      </div>
+      <div class="row flex-nowrap">
+        <label
+          htmlFor={index + "hash"}
+          className={style.marginInput}
+          class="col-md-3"
+        >
+          Hash:
+        </label>
+        <InputResult
+          result={blockArr[index].hash}
+          keyElement={index + "hash"}
+        />
+      </div>
     </div>
   );
 
   const createInput = (index, keyValue, type) => (
     <div class="row flex-nowrap">
-      <label htmlFor={index + keyValue} className={style.marginInput}>
+      <label
+        htmlFor={index + keyValue}
+        className={style.marginInput}
+        class="col-md-4"
+      >
         {keyValue.substring(0, 1).toUpperCase() + keyValue.substring(1)}:
       </label>
       <input

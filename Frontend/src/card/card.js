@@ -17,10 +17,8 @@ const CardHOC = (props) => {
     >
       <Card.Body>
         <Card.Title className={style.title}> {props.title} </Card.Title>
-        <div className={style.spaceDiv}> {props.childern} </div>
-        <div className={`${style.spaceDiv}  ${style.result}`}>
-          {props.result}
-        </div>
+        <div className={style.spaceDiv}>{props.childern}</div>
+        <div className={style.spaceDiv}>{props.result}</div>
       </Card.Body>
       <Card.Footer>
         <Button
