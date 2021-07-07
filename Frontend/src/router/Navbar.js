@@ -9,6 +9,10 @@ function Navbar(props) {
     "Distributed",
     "Tokens",
     "Coinbase",
+    "Keys",
+    "Signatures",
+    "Transaction",
+    "Blockchain-2",
   ];
   return (
     <div>
