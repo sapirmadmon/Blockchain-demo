@@ -51,6 +51,7 @@ const Blockchain = (props) => {
     [blockArr]
   );
 
+  // on click button mine
   const mineBlock = useCallback(
     (indexBlock) => {
       axios
@@ -77,8 +78,7 @@ const Blockchain = (props) => {
   );
 
   const onChangeValue = (e, index, value) => {
-    const copyBlockArr = [...blockArr];
-    copyBlockArr[index][value] = e.target.value;
+    blockArr[index][value] = e.target.value;
     getBlock(index);
   };
 
