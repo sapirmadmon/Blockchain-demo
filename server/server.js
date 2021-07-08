@@ -2,6 +2,7 @@ const express = require("express");
 var bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const websiteContent = require("./model/webSchema");
+const blockContent = require("./model/blockSchema");
 const initDB = require("./init.json");
 const cors = require("cors");
 require("dotenv").config();
@@ -38,6 +39,7 @@ db.on("error", (error) => console.error(error));
 // db init with json file
 db.once("open", async function callback() {
     await websiteContent.deleteMany();
+    await blockContent.deleteMany();
     initDB["websiteContent"].map((record) => {
         const page = new websiteContent(record);
         page
