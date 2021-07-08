@@ -4,6 +4,13 @@ const CryptoBlock = require("../blockchain/block");
 const CryptoBlockchain = require("../blockchain/cryptoBlockchain");
 let arrBlockchain = [];
 
+async function updateBlcok(block, indexBlockchain, indexInblockChain) {
+  let id = "blockchain" + indexBlockchain + "" + indexInblockChain;
+  const update = { ...block };
+  const response = await blockContent.findOneAndUpdate(filter, update);
+  console.log(response);
+}
+
 const initBlockchain = () => {
   const blockchain = new CryptoBlockchain();
 
@@ -19,12 +26,10 @@ const initBlockchainArr = () => {
     arrBlockchain[i] = initBlockchain();
   }
 };
-//initBlockchainArr();
 
 router.get("/blockchain/initBlockchain", (req, res) => {
   initBlockchainArr();
   const index = req.query.indexBlockchain;
-  //res.header("Access-Control-Allow-Origin", "*");
   res.send(arrBlockchain[index]);
 });
 
@@ -32,12 +37,10 @@ router.post("/blockchain/getBlockchain", (req, res) => {
   const newBlock = req.body.newBlock;
   const indexBlockchain = req.body.indexBlockchain;
   arrBlockchain[indexBlockchain].changeBlockchain(newBlock);
-  // res.header("Access-Control-Allow-Origin", "*");
   res.send(arrBlockchain[indexBlockchain]);
 });
 
 router.post("/blockchain/mine", (req, res) => {
-  //res.header("Access-Control-Allow-Origin", "*");
   const indexBlockchain = req.body.indexBlockchain;
   const newBlock = req.body.newBlock;
   arrBlockchain[indexBlockchain].mineBlockchain(newBlock);
