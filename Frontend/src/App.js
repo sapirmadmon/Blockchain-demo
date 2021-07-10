@@ -31,7 +31,7 @@ function App() {
           <Route path="/tokens">
             <Tokens />
           </Route>
-          <Route path="/counbase">
+          <Route path="/coinbase">
             <Coinbase />
           </Route>
         </Switch>
