@@ -4,11 +4,12 @@ import style from "./row.module.css";
 
 const Row = (props) => {
   const descriptionData = props.descriptionData;
-  const index = props.index;
+  const indexBlock = props.indexBlock;
+  const indexRow = props.indexRow;
 
-  const changeInput = (e, indexData) => {
+  const changeInput = (e, indexData, indexRow) => {
     const newValue = e.target.value;
-    props.onchange(index, indexData, newValue);
+    props.onchange(indexBlock, indexData, newValue, indexRow);
   };
 
   const rowHtml = descriptionData.map((description, index) => (
@@ -22,7 +23,7 @@ const Row = (props) => {
         key={index + description}
         name={index + description}
         value={props.data[index]}
-        onChange={(e) => changeInput(e, index)}
+        onChange={(e) => changeInput(e, index, indexRow)}
       />
     </div>
   ));

@@ -2,23 +2,22 @@ import React, { useState, useEffect, useCallback } from "react";
 import Card from "../card/card";
 import InputResult from "../input/inputResult";
 import axios from "axios";
-import Row from "../rowTransaction/row.jsx";
+import ListRow from "../rowTransaction/listRow.jsx";
 
-const Coinbase = () => {
+const Token = () => {
   const [coinbaseArr, setCoinbaseArr] = useState([]);
 
   useEffect(() => {
     let arrOfBlock;
     axios
-      .get("http://localhost:3030/blockchain/initBlockchain", {
+      .get("http://localhost:3030/blockchain/initBlockchainTX", {
         params: {
-          indexBlockchain: 0,
+          indexBlockchain: 2,
         },
       })
       .then((res) => {
         arrOfBlock = res.data.blockchain.reduce((prev, current) => {
           current.background = current.isMine;
-          current.data = [1, 2, 3];
           return [...prev, current];
         }, []);
         setCoinbaseArr(arrOfBlock);
@@ -77,16 +76,15 @@ const Coinbase = () => {
 
   const onChangeValue = (e, index, value) => {
     const copyCoinbaseArr = [...coinbaseArr];
-    console.log(e.target.value);
     copyCoinbaseArr[index][value] = e.target.value;
     setCoinbaseArr(copyCoinbaseArr);
     getBlock(index);
   };
 
-  const onChangedata = (index, indexData, newValue) => {
+  const onChangedata = (index, indexData, newValue, indexArr) => {
     const copyCoinbaseArr = [...coinbaseArr];
-    console.log(newValue);
-    copyCoinbaseArr[index].data[indexData] = newValue;
+    console.log("0:", newValue, "1:", indexArr, "2:", indexData);
+    copyCoinbaseArr[index].data[indexArr][indexData] = newValue;
     setCoinbaseArr(copyCoinbaseArr);
     getBlock(index);
   };
@@ -139,11 +137,12 @@ const Coinbase = () => {
     <div>
       {createInput(index, "index", "number")}
       {createInput(index, "nonce", "number")}
-      <Row
+      Tx:
+      <ListRow
         data={coinbaseArr[index].data}
         descriptionData={["$", "from", "->"]}
         key={index}
-        index={index}
+        indexBlock={index}
         onchange={onChangedata}
       />
     </div>
@@ -166,4 +165,4 @@ const Coinbase = () => {
   );
 };
 
-export default Coinbase;
+export default Token;
