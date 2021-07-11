@@ -7,26 +7,33 @@ const blockchainContent = require("../model/blockchainSchema");
 const { updateBlockchain, findBlockchainByIndex } = require("../DB/update");
 
 const id = "blockchain";
+const arrBlockchain = []; //array of all blockchain
 
-const initBlockchain = () => {
+const initBlockchain = (index) => {
     const blockchain = new CryptoBlockchain();
-
+    let block;
     for (let i = 2; i <= 5; i++) {
-        const block = new CryptoBlock(i, "01/06/2020", "");
+        if (index < 4) {
+            block = new CryptoBlock(i, "01/06/2020", "");
+        } else {
+            block = new CryptoBlock(i, "01/06/2020", [
+                [1, "andres", "sofia"],
+                [3, "ash", "dan"],
+            ]);
+        }
         blockchain.addNewBlock(block);
     }
     return blockchain;
 };
 
-const initBlockchainArr = (arrBlockchain) => {
+const initBlockchainArr = (index) => {
     for (let i = 0; i < 4; i++) {
-        arrBlockchain[i] = initBlockchain(i);
+        arrBlockchain[i] = initBlockchain(index);
     }
 };
 
 router.get("/blockchain/initBlockchain", (req, res) => {
-    const arrBlockchain = []; //array of all blockchain
-    initBlockchainArr(arrBlockchain);
+    initBlockchainArr(req.query.indexBlockchain);
     const index = req.query.indexBlockchain;
 
     const cur_blockchain = arrBlockchain[index]; //current blockchain
@@ -36,33 +43,31 @@ router.get("/blockchain/initBlockchain", (req, res) => {
         id: id + index,
     });
     content.save().catch(() => {
-        updateBlockchain(cur_blockchain, "blockchain" + index);
+        updateBlockchain(cur_blockchain, id + index);
     });
 
     res.send(arrBlockchain[index]);
 });
 
-router.post("/blockchain/getBlockchain", async(req, res) => {
+router.post("/blockchain/getBlockchain", (req, res) => {
     const newBlock = req.body.newBlock;
     const indexBlockchain = req.body.indexBlockchain;
-    const cur_blockchain = new CryptoBlockchain();
-    cur_blockchain.initBlockchain(
-        await findBlockchainByIndex("blockchain" + indexBlockchain)
-    );
+
+    const cur_blockchain = arrBlockchain[indexBlockchain];
     cur_blockchain.changeBlockchain(newBlock);
 
-    updateBlockchain(cur_blockchain, "blockchain" + indexBlockchain);
+    updateBlockchain(cur_blockchain, id + indexBlockchain);
 
     res.send(cur_blockchain);
 });
 
-router.post("/blockchain/mine", async(req, res) => {
+router.post("/blockchain/mine", (req, res) => {
     const indexBlockchain = req.body.indexBlockchain;
     const newBlock = req.body.newBlock;
     arrBlockchain[indexBlockchain].mineBlockchain(newBlock);
 
     const cur_blockchain = arrBlockchain[indexBlockchain];
-    await updateBlockchain(cur_blockchain, "blockchain" + indexBlockchain);
+    updateBlockchain(cur_blockchain, id + indexBlockchain);
 
     res.send(arrBlockchain[indexBlockchain]);
 });

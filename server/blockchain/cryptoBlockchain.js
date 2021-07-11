@@ -5,22 +5,22 @@ class CryptoBlockchain {
         this.blockchain = [this.startGenesisBlock()];
     }
 
-    initBlockchain(dataBlockchain) {
-        this.blockchain = [];
-        const data = dataBlockchain.blockchain;
-        for (let i = 0; i < data.length; i++) {
-            const block = new CryptoBlock(
-                data[i].index,
-                "01/01/2020",
-                data[i].data,
-                data[i].precedingHash,
-                data[i].nonce,
-                data[i].hash,
-                data[i].isMine
-            );
-            this.blockchain.push(block);
-        }
-    }
+    //initBlockchain(dataBlockchain) {
+    //    this.blockchain = [];
+    //    const data = dataBlockchain.blockchain;
+    //    for (let i = 0; i < data.length; i++) {
+    //        const block = new CryptoBlock(
+    //            data[i].index,
+    //            "01/01/2020",
+    //            data[i].data,
+    //            data[i].precedingHash,
+    //            data[i].nonce,
+    //            data[i].hash,
+    //            data[i].isMine
+    //        );
+    //        this.blockchain.push(block);
+    //    }
+    //}
 
     startGenesisBlock() {
         const firstBlock = new CryptoBlock(1, "01/01/2020", "", "0");
