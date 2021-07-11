@@ -1,17 +1,21 @@
 const blockContent = require("../model/blockSchema");
+const blockchainContent = require("../model/blockchainSchema");
 
-//async function updateBlock(block, id2) {
-//    const filter = { id: id2 };
-//    const update = {...block };
-//    const response = await blockContent.findOneAndUpdate(filter, update);
-//    console.log(response);
-//}
+const findBlockchainByIndex = async function(indexBlockchain) {
+    const filter = { id: indexBlockchain };
+    return await blockchainContent.findOne(filter);
+};
 
-var updateBlock = async function(block, id2) {
+const updateBlock = async function(block, id2) {
     const filter = { id: id2 };
     const update = {...block };
     const response = await blockContent.findOneAndUpdate(filter, update);
-    console.log(response);
 };
 
-module.exports = updateBlock;
+const updateBlockchain = async function(blockchain, id2) {
+    const filter = { id: id2 };
+    const update = {...blockchain };
+    const response = await blockchainContent.findOneAndUpdate(filter, update);
+};
+
+module.exports = { updateBlock, updateBlockchain, findBlockchainByIndex };

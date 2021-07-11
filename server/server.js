@@ -3,6 +3,7 @@ var bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const websiteContent = require("./model/webSchema");
 const blockContent = require("./model/blockSchema");
+const blockchainContent = require("./model/blockchainSchema");
 const initDB = require("./init.json");
 const cors = require("cors");
 require("dotenv").config();
@@ -40,6 +41,7 @@ db.on("error", (error) => console.error(error));
 db.once("open", async function callback() {
     await websiteContent.deleteMany();
     await blockContent.deleteMany();
+    await blockchainContent.deleteMany();
     initDB["websiteContent"].map((record) => {
         const page = new websiteContent(record);
         page
