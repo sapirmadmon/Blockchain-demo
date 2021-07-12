@@ -1,4 +1,5 @@
 .labelGray {
+  margin: 0px;
   font-size: 14px;
   font-weight: 400;
   line-height: 1;
@@ -15,8 +16,6 @@
 
 .inputData {
   width: 40%;
-  height: 34px;
-  font-size: 14px;
   line-height: 1.42857;
   background-color: rgb(255, 255, 255);
   background-image: none;
@@ -32,4 +31,7 @@
 .marginInput {
   margin-right: 5px;
   padding-right: 5px;
+}
+.space {
+  margin: 0px;
 }

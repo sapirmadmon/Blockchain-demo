@@ -5,8 +5,8 @@ import Block from "./blockchain/block.jsx";
 import Blockchain from "./blockchain/blockchain.jsx";
 import DistributedBlockchain from "./blockchain/distributedBlockchain.jsx";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Tokens from "./tokens/tokens.jsx";
-import Token from "./token/token.jsx";
+import Token from "./transaction/token.jsx";
+import Coinbase from "./transaction/coinbase";
 import Hash from "./hash/hash";
 
 function App() {
@@ -32,7 +32,7 @@ function App() {
             <Token />
           </Route>
           <Route path="/coinbase">
-            <Token />
+            <Coinbase />
           </Route>
         </Switch>
       </div>

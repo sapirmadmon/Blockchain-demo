@@ -44,7 +44,25 @@ const initBlockchainArrTX = () => {
   }
 };
 
-router.get("/blockchain/initBlockchainTX", (req, res) => {
+//need to replace data
+router.get("/blockchain/initBlockchainCoinbase", (req, res) => {
+  initBlockchainArrTX();
+  const index = req.query.indexBlockchain;
+
+  const cur_blockchain = arrBlockchain[index]; //current blockchain
+
+  const content = new blockchainContent({
+    ...cur_blockchain,
+    id: id + index,
+  });
+  content.save().catch(() => {
+    updateBlockchain(cur_blockchain, id + index);
+  });
+
+  res.send(arrBlockchain[index]);
+});
+
+router.get("/blockchain/initBlockchainToken", (req, res) => {
   initBlockchainArrTX();
   const index = req.query.indexBlockchain;
 

@@ -3,7 +3,10 @@ import React from "react";
 import style from "./row.module.css";
 
 const Row = (props) => {
-  const descriptionData = props.descriptionData;
+  const descriptionData = ["$", "from", "->"];
+  const coinbaseDataDescription = ["$", "->"];
+  let descrption;
+
   const indexBlock = props.indexBlock;
   const indexRow = props.indexRow;
 
@@ -12,8 +15,14 @@ const Row = (props) => {
     props.onchange(indexBlock, indexData, newValue, indexRow);
   };
 
-  const rowHtml = descriptionData.map((description, index) => (
-    <div class="flex" key={index}>
+  if (props.data.length === 2) {
+    descrption = coinbaseDataDescription;
+  } else {
+    descrption = descriptionData;
+  }
+
+  const rowHtml = descrption.map((description, index) => (
+    <div class="flex-inline" key={index} className={style.space}>
       <label htmlFor={index + description} className={style.labelGray}>
         {description}
       </label>
@@ -29,7 +38,7 @@ const Row = (props) => {
   ));
 
   return (
-    <div className={style.marginInput} class="row flex-nowrap col-md-25">
+    <div className={style.marginInput} class="row flex-nowrap col-md-20">
       {rowHtml}
     </div>
   );

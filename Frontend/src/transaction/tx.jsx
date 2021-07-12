@@ -4,15 +4,17 @@ import InputResult from "../input/inputResult";
 import axios from "axios";
 import ListRow from "../rowTransaction/listRow.jsx";
 
-const Token = () => {
-  const [coinbaseArr, setCoinbaseArr] = useState([]);
+const TX = (props) => {
+  const [txArr, setTxArr] = useState([]);
+  const indexBlockchain = props.indexBlockchain;
+  const url = props.URLInit;
 
   useEffect(() => {
     let arrOfBlock;
     axios
-      .get("http://localhost:3030/blockchain/initBlockchainTX", {
+      .get("http://localhost:3030/blockchain/" + url, {
         params: {
-          indexBlockchain: 2,
+          indexBlockchain: indexBlockchain,
         },
       })
       .then((res) => {
@@ -20,7 +22,7 @@ const Token = () => {
           current.background = current.isMine;
           return [...prev, current];
         }, []);
-        setCoinbaseArr(arrOfBlock);
+        setTxArr(arrOfBlock);
       });
   }, []);
 
@@ -31,21 +33,21 @@ const Token = () => {
         .post("http://localhost:3030/blockchain/getBlockchain", {
           newBlock: {
             numBlock: indexBlock,
-            data: coinbaseArr[indexBlock].data,
-            nonce: coinbaseArr[indexBlock].nonce,
-            index: coinbaseArr[indexBlock].index,
+            data: txArr[indexBlock].data,
+            nonce: txArr[indexBlock].nonce,
+            index: txArr[indexBlock].index,
           },
-          indexBlockchain: 0,
+          indexBlockchain: indexBlockchain,
         })
         .then((res) => {
           const blockchain = res.data.blockchain.map((block, index) => {
             block.background = block.isMine;
             return block;
           });
-          setCoinbaseArr(blockchain);
+          setTxArr(blockchain);
         });
     },
-    [coinbaseArr]
+    [txArr]
   );
 
   // on click button mine
@@ -55,12 +57,11 @@ const Token = () => {
         .post("http://localhost:3030/blockchain/mine", {
           newBlock: {
             numBlock: indexBlock,
-            data: coinbaseArr[indexBlock].data,
-            nonce: coinbaseArr[indexBlock].nonce,
-            index: coinbaseArr[indexBlock].index,
-            indexBlockchain: 0,
+            data: txArr[indexBlock].data,
+            nonce: txArr[indexBlock].nonce,
+            index: txArr[indexBlock].index,
+            indexBlockchain: indexBlockchain,
           },
-          indexBlockchain: 0,
         })
         .then((res) => {
           const newBlockArr = res.data.blockchain.map((block, index) => {
@@ -68,24 +69,23 @@ const Token = () => {
             return block;
           });
 
-          setCoinbaseArr(newBlockArr);
+          setTxArr(newBlockArr);
         });
     },
-    [coinbaseArr]
+    [txArr]
   );
 
   const onChangeValue = (e, index, value) => {
-    const copyCoinbaseArr = [...coinbaseArr];
-    copyCoinbaseArr[index][value] = e.target.value;
-    setCoinbaseArr(copyCoinbaseArr);
+    const copytxArr = [...txArr];
+    copytxArr[index][value] = e.target.value;
+    setTxArr(copytxArr);
     getBlock(index);
   };
 
   const onChangedata = (index, indexData, newValue, indexArr) => {
-    const copyCoinbaseArr = [...coinbaseArr];
-    console.log("0:", newValue, "1:", indexArr, "2:", indexData);
-    copyCoinbaseArr[index].data[indexArr][indexData] = newValue;
-    setCoinbaseArr(copyCoinbaseArr);
+    const copytxArr = [...txArr];
+    copytxArr[index].data[indexArr][indexData] = newValue;
+    setTxArr(copytxArr);
     getBlock(index);
   };
 
@@ -100,7 +100,7 @@ const Token = () => {
           prev:
         </label>
         <InputResult
-          result={coinbaseArr[index].precedingHash}
+          result={txArr[index].precedingHash}
           keyElement={index + "precedingHash"}
         />
       </div>
@@ -108,10 +108,7 @@ const Token = () => {
         <label htmlFor={index + "hash"} className={null} class="col-md-3">
           Hash:
         </label>
-        <InputResult
-          result={coinbaseArr[index].hash}
-          keyElement={index + "hash"}
-        />
+        <InputResult result={txArr[index].hash} keyElement={index + "hash"} />
       </div>
     </div>
   );
@@ -125,7 +122,7 @@ const Token = () => {
         type={type}
         id={index + keyValue}
         name={keyValue}
-        value={coinbaseArr[index][keyValue]}
+        value={txArr[index][keyValue]}
         onChange={(e) => onChangeValue(e, index, keyValue)}
         key={index + keyValue}
         className={null}
@@ -139,8 +136,7 @@ const Token = () => {
       {createInput(index, "nonce", "number")}
       Tx:
       <ListRow
-        data={coinbaseArr[index].data}
-        descriptionData={["$", "from", "->"]}
+        data={txArr[index].data}
         key={index}
         indexBlock={index}
         onchange={onChangedata}
@@ -150,7 +146,7 @@ const Token = () => {
 
   return (
     <div class="col-md-25 row flex-nowrap">
-      {coinbaseArr.map((block, index) => (
+      {txArr.map((block, index) => (
         <Card
           hiddenButton={false}
           title=""
@@ -165,4 +161,4 @@ const Token = () => {
   );
 };
 
-export default Token;
+export default TX;
