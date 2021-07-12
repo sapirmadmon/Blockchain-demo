@@ -62,6 +62,7 @@ const TX = (props) => {
             index: txArr[indexBlock].index,
             indexBlockchain: indexBlockchain,
           },
+          indexBlockchain: indexBlockchain,
         })
         .then((res) => {
           const newBlockArr = res.data.blockchain.map((block, index) => {

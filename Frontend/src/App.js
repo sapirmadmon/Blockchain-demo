@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Token from "./transaction/token.jsx";
 import Coinbase from "./transaction/coinbase";
 import Hash from "./hash/hash";
+import Keys from "./key/keys.jsx";
 
 function App() {
   return (
@@ -15,7 +16,6 @@ function App() {
       <div>
         <Navbar />
         <Switch>
-          <Route path="/somePage">some page 1</Route>
           <Route path="/block">
             <Block></Block>
           </Route>
@@ -33,6 +33,9 @@ function App() {
           </Route>
           <Route path="/coinbase">
             <Coinbase />
+          </Route>
+          <Route path="/Keys">
+            <Keys />
           </Route>
         </Switch>
       </div>
