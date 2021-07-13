@@ -15,6 +15,7 @@ const routerHash = require("./routes/hash");
 const routerBlock = require("./routes/block");
 const routerBlockchain = require("./routes/blockchain");
 const routerKeys = require("./routes/keys");
+const routerSignature = require("./routes/signature");
 
 app = express();
 app.use(cors());
@@ -30,6 +31,7 @@ app.use((req, res, next) => next(), routerHash);
 app.use((req, res, next) => next(), routerBlock);
 app.use((req, res, next) => next(), routerBlockchain);
 app.use((req, res, next) => next(), routerKeys);
+app.use((req, res, next) => next(), routerSignature);
 // db config
 mongoose.connect(
     process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true },
@@ -45,6 +47,7 @@ db.once("open", async function callback() {
     await blockContent.deleteMany();
     await blockchainContent.deleteMany();
     await signatureContent.deleteMany();
+
     initDB["websiteContent"].map((record) => {
         const page = new websiteContent(record);
         page
