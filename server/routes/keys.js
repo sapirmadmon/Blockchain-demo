@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-//const CryptoBlock = require("../blockchain/block");
 const EC = require("elliptic").ec;
 const ec = new EC("secp256k1");
 
@@ -26,23 +25,14 @@ router.get("/keys/initKeys", async(req, res) => {
     });
 });
 
-//router.post("/keys/random", async (req, res) => {
-//  const index = req.body.index;
-//  const data = req.body.data;
-//  const nonce = req.body.nonce;
+router.post("/keys/publicKey", async(req, res) => {
+    const privateKey = req.body.prKey;
+    const publicKey = ec.keyFromPrivate(privateKey).getPublic("hex").toString();
 
-//  block = new CryptoBlock(index, Date.now(), data, "", nonce);
-//  block.checkIfBlockMine();
-//  updateBlock(block, id);
-
-//  res.header("Access-Control-Allow-Origin", "*");
-//  res.json({
-//    index: block.index,
-//    nonce: block.nonce,
-//    data: block.data,
-//    hash: block.hash,
-//    isMine: block.isMine,
-//  });
-//});
-
+    res.header("Access-Control-Allow-Origin", "*");
+    res.json({
+        prKey: privateKey,
+        puKey: publicKey,
+    });
+});
 module.exports = router;
