@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const CryptoBlock = require("../blockchain/block");
 const blockContent = require("../model/blockSchema");
-const updateBlock = require("../DB/update");
+const { updateBlock } = require("../DB/update");
 
 const id = "hash";
 
