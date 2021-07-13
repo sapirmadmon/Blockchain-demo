@@ -9,6 +9,7 @@ import Token from "./transaction/token.jsx";
 import Coinbase from "./transaction/coinbase";
 import Hash from "./hash/hash";
 import Keys from "./key/keys.jsx";
+import Signatures from "./key/signatures";
 
 function App() {
   return (
@@ -36,6 +37,9 @@ function App() {
           </Route>
           <Route path="/Keys">
             <Keys />
+          </Route>
+          <Route path="/Signatures">
+            <Signatures />
           </Route>
         </Switch>
       </div>

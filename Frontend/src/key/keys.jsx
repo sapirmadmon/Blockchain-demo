@@ -9,15 +9,16 @@ const Keys = () => {
   const [publicKey, setPublicKey] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:3030/keys/initKeys").then((res) => {
-      setPrivateKey(res.data.prKey);
-      setPublicKey(res.data.puKey);
-    });
+    random();
   }, []);
 
   const onChangeHash = (e) => {
     setPrivateKey(e.target.value);
-    random();
+    axios
+      .post("http://localhost:3030/keys/publicKey", { prKey: privateKey })
+      .then((res) => {
+        setPublicKey(res.data.puKey);
+      });
   };
 
   const random = () => {
