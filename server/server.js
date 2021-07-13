@@ -13,6 +13,7 @@ const router = require("./routes/route");
 const routerHash = require("./routes/hash");
 const routerBlock = require("./routes/block");
 const routerBlockchain = require("./routes/blockchain");
+const routerKeys = require("./routes/keys");
 
 app = express();
 app.use(cors());
@@ -27,7 +28,7 @@ app.use((req, res, next) => next(), router);
 app.use((req, res, next) => next(), routerHash);
 app.use((req, res, next) => next(), routerBlock);
 app.use((req, res, next) => next(), routerBlockchain);
-
+app.use((req, res, next) => next(), routerKeys);
 // db config
 mongoose.connect(
     process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true },
