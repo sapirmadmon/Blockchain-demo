@@ -3,16 +3,18 @@ import CardPart2 from "./../card/cardPart2.js";
 import axios from "axios";
 import InputResult from "../input/inputResult.js";
 import style from "./keys.module.css";
+import { Button } from "react-bootstrap";
 
 const Signatures = () => {
   const [privateKey, setPrivateKey] = useState("");
   const [publicKey, setPublicKey] = useState("");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     random();
   }, []);
 
-  const onChangeHash = (e) => {
+  const onChangePrivateKey = (e) => {
     setPrivateKey(e.target.value);
     axios
       .post("http://localhost:3030/keys/publicKey", { prKey: privateKey })
@@ -28,39 +30,79 @@ const Signatures = () => {
     });
   };
 
+  const sign = () => {};
+
+  const verify = () => {};
+
+  const inputMessage = (
+    <div>
+      <label htmlFor="message" className={style.marginInput}>
+        Message:
+      </label>
+      <br />
+      <input
+        type="text"
+        id="message"
+        name="message"
+        value={privateKey}
+        onChange={onChangePrivateKey}
+        className={style.inputData}
+      />
+    </div>
+  );
+
   const inputText = (
     <div>
       <label htmlFor="privateKey" className={style.marginInput}>
         Private Key:
       </label>
+      <br />
       <input
         type="text"
         id="privateKey"
         name="privateKey"
         value={privateKey}
-        onChange={onChangeHash}
+        onChange={onChangePrivateKey}
         className={style.inputData}
       />
-      <button onClick={random}>Random</button>
     </div>
   );
 
   const inputResult = (
     <div>
-      <label htmlFor="hash" className={style.marginInput}>
-        Public Key:
+      <label htmlFor="message" className={style.marginInput}>
+        Message Signature:
       </label>
-      <InputResult result={publicKey} />
+      <br />
+      <InputResult result={message} />
+    </div>
+  );
+
+  const divInput1 = (
+    <div>
+      {inputText}
+      {inputMessage}
+      <br />
+      <Button class="btn btn-primary btn-block w-75" onClick={() => sign()}>
+        Sign
+      </Button>
+    </div>
+  );
+  const divInput2 = (
+    <div>
+      {inputText}
+      {inputMessage}
+      <br />
+      <Button class="btn btn-primary btn-block w-75" onClick={() => verify()}>
+        Verfiy
+      </Button>
     </div>
   );
 
   return (
     <div>
-      <CardPart2
-        childern={inputText}
-        result={inputResult}
-        title="Public / Private Key Pairs"
-      />
+      <CardPart2 childern={divInput1} result={inputResult} title="Signatures" />
+      <CardPart2 childern={divInput2} result={inputResult} title="Signatures" />
     </div>
   );
 };
