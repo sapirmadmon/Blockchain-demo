@@ -1,79 +1,28 @@
 {
-    "transactions": [{
-        "block1": [{
-                "price": 25,
-                "from": "Darcy",
-                "to": "Lydia"
-            },
-            {
-                "price": 100,
-                "from": "Ander",
-                "to": "Sum"
-            },
-            {
-                "price": 10,
-                "from": "Kane",
-                "to": "Ash"
-            }
+    "transactions": {
+        "block1": [
+            [25, "Darcy", "Lydia"],
+            [100, "Ander", "Sum"],
+            [10, "Kane", "Ash"]
         ],
-        "block2": [{
-                "price": 30,
-                "from": "Ander",
-                "to": "Apone"
-            },
-            {
-                "price": 20,
-                "from": "Emily",
-                "to": "Jackson"
-            },
-            {
-                "price": 5,
-                "from": "Ander",
-                "to": "Jackson"
-            }
+        "block2": [
+            [30, "Ander", "Apone"],
+            [20, "Emily", "Jackson"],
+            [5, "Ander", "Jackson"]
         ],
-        "block3": [{
-                "price": 62,
-                "from": "Denise",
-                "to": "Sum"
-            },
-            {
-                "price": 32,
-                "from": "Madison",
-                "to": "Grace"
-            }
+        "block3": [
+            [62, "Denise", "Sum"],
+            [32, "Madison", "Grace"]
         ],
-        "block4": [{
-                "price": 98,
-                "from": "Ander",
-                "to": "Sum"
-            },
-            {
-                "price": 63,
-                "from": "Ander",
-                "to": "Emily"
-            },
-            {
-                "price": 20,
-                "from": "Rick",
-                "to": "Ilsa"
-            },
-            {
-                "price": 123,
-                "from": "Victor",
-                "to": "Rick"
-            }
+        "block4": [
+            [98, "Ander", "Sum"],
+            [63, "Ander", "Emily"],
+            [20, "Rick", "Ilsa"],
+            [123, "Victor", "Rick"]
         ],
-        "block5": [{
-                "price": 60,
-                "from": "Captain",
-                "to": "Sum"
-            },
-            {
-                "price": 32,
-                "from": "Ander",
-                "to": "Victor"
-            }
+        "block5": [
+            [60, "Captain", "Sum"],
+            [32, "Ander", "Victor"]
         ]
-    }]
+    }
 }

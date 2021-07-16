@@ -38,12 +38,8 @@ router.post("/signature/sign", async(req, res) => {
     const privateKey = req.body.prKey;
     const publicKey = ec.keyFromPrivate(privateKey).getPublic("hex").toString();
 
-    const messageSign = ec
-        .sign(massage, privateKey, "hex", {
-            canonical: true,
-        })
-        .toString();
-    console.log("messageSign: ", JSON.stringify(messageSign));
+    const messageSign = key.sign(massage);
+    console.log("messageSign: ", messageSign);
 
     const signature = new Signature(massage, privateKey, publicKey, messageSign);
 
