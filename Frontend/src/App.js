@@ -10,6 +10,7 @@ import Coinbase from "./transaction/coinbase";
 import Hash from "./hash/hash";
 import Keys from "./key/keys.jsx";
 import Signatures from "./key/signatures";
+import Transaction from "./key/transaction";
 
 function App() {
   return (
@@ -40,6 +41,9 @@ function App() {
           </Route>
           <Route path="/Signatures">
             <Signatures />
+          </Route>
+          <Route path="/Transaction">
+            <Transaction />
           </Route>
         </Switch>
       </div>
