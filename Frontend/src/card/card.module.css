@@ -18,6 +18,7 @@
 
 .errorBackround {
   background-color: rgb(250, 220, 220) !important;
+  min-width: 400px !important;
 }
 
 .backGround {
