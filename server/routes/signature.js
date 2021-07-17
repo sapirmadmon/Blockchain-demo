@@ -6,6 +6,7 @@ const ec = new EC("secp256k1");
 const signatureContent = require("../model/signatureSchema");
 const updateSign = require("../DB/updateSignature");
 const id = "signature";
+const SHA256 = require("crypto-js/sha256");
 
 router.get("/signature/initSignature", async(req, res) => {
     const key = ec.genKeyPair();
@@ -35,10 +36,12 @@ router.get("/signature/initSignature", async(req, res) => {
 router.post("/signature/sign", async(req, res) => {
     const key = ec.genKeyPair();
     const massage = req.body.massage;
-    const privateKey = req.body.prKey;
+    const privateKey = key.getPrivate("hex"); //req.body.prKey;
     const publicKey = ec.keyFromPrivate(privateKey).getPublic("hex").toString();
 
-    const messageSign = key.sign(massage);
+    const hashMsg = SHA256(massage).toString();
+    const messageSign = ec.sign(hashMsg, "base64").toDER("hex");
+
     console.log("messageSign: ", messageSign);
 
     const signature = new Signature(massage, privateKey, publicKey, messageSign);
@@ -49,6 +52,28 @@ router.post("/signature/sign", async(req, res) => {
     res.json({
         massage: massage,
         prKey: privateKey,
+        signature: messageSign,
+    });
+});
+
+router.post("/signature/verify", async(req, res) => {
+    //const key = ec.genKeyPair();
+    const massage = req.body.massage;
+    const privateKey = req.body.prKey;
+    const publicKey = ec.keyFromPrivate(privateKey).getPublic("hex").toString();
+    const messageSign = req.body.signature;
+
+    const ifVerify = ec
+        .keyFromPublic(publicKey, "hex")
+        .verify(massage, messageSign);
+
+    console.log("ifVerify: ", ifVerify);
+
+    res.header("Access-Control-Allow-Origin", "*");
+    res.json({
+        ifVerify: ifVerify,
+        massage: massage,
+        puKey: publicKey,
         signature: messageSign,
     });
 });
