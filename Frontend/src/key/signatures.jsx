@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "react-bootstrap";
 import CardPart2 from "./../card/cardPart2.js";
 import axios from "axios";
@@ -10,6 +10,8 @@ const Signatures = () => {
   const [publicKey, setPublicKey] = useState("");
   const [message, setMessage] = useState("");
   const [sign, setSign] = useState("");
+  const [isVerfiy, setIsVerify] = useState(true);
+  const [havecolor, setHavecolor] = useState(false);
 
   useEffect(() => {
     axios.get("http://localhost:3030/signature/initSignature").then((res) => {
@@ -18,9 +20,21 @@ const Signatures = () => {
     });
   }, []);
 
-  const onSign = () => {};
+  const onSign = useCallback(() => {
+    axios
+      .post("http://localhost:3030/signature/sign", {
+        message: message,
+        prKey: privateKey,
+      })
+      .then((res) => {
+        setPublicKey(res.data.puKey);
+        setSign(res.data.signature);
+      });
+  }, [message, privateKey]);
 
-  const verify = () => {};
+  const verify = () => {
+    setHavecolor(true);
+  };
 
   const onChangePK = (e) => {
     setPrivateKey(e.target.value);
@@ -151,8 +165,10 @@ const Signatures = () => {
       />
       <CardPart2
         key="2"
+        color={isVerfiy}
         childern={divInput2}
         result={inputSign}
+        haveColor={havecolor}
         title="Signatures - Verify"
       />
     </div>
