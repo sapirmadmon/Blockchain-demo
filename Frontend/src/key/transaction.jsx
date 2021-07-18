@@ -8,7 +8,6 @@ import ListRow from "../rowTransaction/listRow.jsx";
 
 const Transaction = () => {
   const [privateKey, setPrivateKey] = useState("");
-  const [publicKey, setPublicKey] = useState("");
   const [data, setData] = useState();
   const [sign, setSign] = useState("");
   const [isVerfiy, setIsVerify] = useState(true);
@@ -20,7 +19,6 @@ const Transaction = () => {
       .then((res) => {
         console.log(res);
         setPrivateKey(res.data.prKey);
-        setPublicKey(res.data.puKey);
         setData([res.data.message]);
       });
   }, []);
