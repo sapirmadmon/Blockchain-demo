@@ -160,6 +160,7 @@ const Signatures = () => {
     <div>
       {inputMessage}
       {inputPublicKey}
+      {inputSign}
       <br />
       <Button
         class="btn btn-primary w-75"
@@ -183,7 +184,7 @@ const Signatures = () => {
         key="2"
         color={isVerfiy}
         childern={divInput2}
-        result={inputSign}
+        result={null}
         haveColor={havecolor}
         title="Signatures - Verify"
       />
