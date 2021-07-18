@@ -6,7 +6,7 @@ const SignatureSchema = new mongoose.Schema({
         required: false,
         unique: true,
     },
-    massage: {
+    message: {
         type: String,
         required: false,
         unique: true,

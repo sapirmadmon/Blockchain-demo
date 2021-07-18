@@ -1,6 +1,6 @@
 class Signature {
-    constructor(massage, prKey, puKey, signature) {
-        this.massage = massage;
+    constructor(message, prKey, puKey, signature) {
+        this.message = message;
         this.prKey = prKey;
         this.puKey = puKey;
         this.signature = signature;
