@@ -34,9 +34,8 @@ const Signatures = () => {
 
   const verify = useCallback(() => {
     setHavecolor(true);
-
     axios
-      .get("http://localhost:3030/signature/verify", {
+      .post("http://localhost:3030/signature/verify", {
         message: message,
         puKey: publicKey,
         signature: sign,
