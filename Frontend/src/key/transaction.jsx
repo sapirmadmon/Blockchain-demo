@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "react-bootstrap";
 import CardPart2 from "./../card/cardPart2.js";
 import axios from "axios";
@@ -11,53 +11,63 @@ const Transaction = () => {
   const [publicKey, setPublicKey] = useState("");
   const [data, setData] = useState();
   const [sign, setSign] = useState("");
+  const [isVerfiy, setIsVerify] = useState(true);
+  const [havecolor, setHavecolor] = useState(false);
 
   useEffect(() => {
-    axios.get("http://localhost:3030/signature/initSignature").then((res) => {
-      setPrivateKey(res.data.prKey);
-      setPublicKey(res.data.puKey);
-      setData([["1", "2", "3"]]);
-    });
+    axios
+      .get("http://localhost:3030/transaction/initTransaction")
+      .then((res) => {
+        console.log(res);
+        setPrivateKey(res.data.prKey);
+        setPublicKey(res.data.puKey);
+        setData([res.data.message]);
+      });
   }, []);
 
-  const onSign = () => {};
+  const onSign = useCallback(() => {
+    const copyArr = [...data];
+    axios
+      .post("http://localhost:3030/transaction/sign", {
+        message: data[0],
+        prKey: privateKey,
+      })
+      .then((res) => {
+        setSign(res.data.signature);
+        copyArr[0][1] = res.data.puKey;
+        setData(copyArr);
+      });
 
-  const verify = () => {};
+    setHavecolor(false);
+  }, [data, privateKey]);
+
+  const verify = useCallback(() => {
+    setHavecolor(true);
+  }, []);
 
   const onChangePK = (e) => {
     setPrivateKey(e.target.value);
-  };
 
-  const onChangePublicKey = (e) => {
-    setPublicKey(e.target.value);
+    axios
+      .post("http://localhost:3030/transaction/getPublicKey", {
+        prKey: privateKey,
+      })
+      .then((res) => (data[0][1] = res.data.puKey));
+
+    setHavecolor(false);
   };
 
   const onChangeData = (index = null, indexData, newValue, indexArr) => {
     const copytxArr = [...data];
     copytxArr[indexArr][indexData] = newValue;
     setData(copytxArr);
+    setHavecolor(false);
   };
 
   const onChangeSign = (e) => {
+    setHavecolor(false);
     setSign(e.target.value);
   };
-
-  const inputPublicKey = (
-    <div>
-      <label htmlFor="publicKey" className={style.marginInput}>
-        Public Key:
-      </label>
-      <br />
-      <input
-        type="text"
-        id="publicKey"
-        name="publicKey"
-        value={publicKey}
-        onChange={onChangePublicKey}
-        className={style.inputData}
-      />
-    </div>
-  );
 
   const inputMessage = (
     <div className={style.marginInputLeft}>
@@ -153,8 +163,10 @@ const Transaction = () => {
       />
       <CardPart2
         key="2"
+        color={isVerfiy}
         childern={divInput2}
         result={null}
+        haveColor={havecolor}
         title="Transaction - Verify"
       />
     </div>

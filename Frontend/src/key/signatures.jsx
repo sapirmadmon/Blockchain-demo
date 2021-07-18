@@ -21,6 +21,7 @@ const Signatures = () => {
   }, []);
 
   const onSign = useCallback(() => {
+    setHavecolor(false);
     axios
       .post("http://localhost:3030/signature/sign", {
         message: message,
