@@ -10,7 +10,6 @@ const SHA256 = require("crypto-js/sha256");
 
 router.get("/transaction/initTransaction", async(req, res) => {
     const key = ec.genKeyPair();
-    //const key2 = ec.genKeyPair();
 
     const privateKey = key.getPrivate("hex");
     const fromPublicKey = ec
@@ -40,7 +39,17 @@ router.get("/transaction/initTransaction", async(req, res) => {
     res.json({
         message: message,
         prKey: signature.prKey,
-        //puKey: signature.puKey,
+    });
+});
+
+router.post("/transaction/getPublicKey", async(req, res) => {
+    const privateKey = req.body.prKey;
+
+    const publicKey = ec.keyFromPrivate(privateKey).getPublic("hex").toString();
+
+    res.header("Access-Control-Allow-Origin", "*");
+    res.json({
+        puKey: publicKey,
     });
 });
 
