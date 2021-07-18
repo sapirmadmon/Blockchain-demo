@@ -32,24 +32,41 @@ const Signatures = () => {
       });
   }, [message, privateKey]);
 
-  const verify = () => {
+  const verify = useCallback(() => {
     setHavecolor(true);
-  };
+
+    axios
+      .get("http://localhost:3030/signature/verify", {
+        message: message,
+        puKey: publicKey,
+        signature: sign,
+      })
+      .then((res) => {
+        setPublicKey(res.data.puKey);
+        setMessage(res.data.message);
+        setIsVerify(res.data.ifVerify);
+        setSign(res.data.signature);
+      });
+  }, [message, publicKey, sign]);
 
   const onChangePK = (e) => {
     setPrivateKey(e.target.value);
+    setHavecolor(false);
   };
 
   const onChangePublicKey = (e) => {
     setPublicKey(e.target.value);
+    setHavecolor(false);
   };
 
   const onChangeMeassage = (e) => {
     setMessage(e.target.value);
+    setHavecolor(false);
   };
 
   const onChangeSign = (e) => {
     setSign(e.target.value);
+    setHavecolor(false);
   };
 
   const inputPublicKey = (
