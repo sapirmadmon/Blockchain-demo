@@ -42,8 +42,21 @@ const Transaction = () => {
   }, [data, privateKey]);
 
   const verify = useCallback(() => {
+    const copyArr = [...data];
+    axios
+      .post("http://localhost:3030/transaction/verify", {
+        message: data[0],
+        puKey: data[0][1],
+        signature: sign,
+      })
+      .then((res) => {
+        setSign(res.data.signature);
+        copyArr[0][1] = res.data.puKey;
+        setIsVerify(res.data.ifVerify);
+        setData(copyArr);
+      });
     setHavecolor(true);
-  }, []);
+  }, [data, sign]);
 
   const onChangePK = (e) => {
     setPrivateKey(e.target.value);

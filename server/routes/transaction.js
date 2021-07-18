@@ -96,7 +96,6 @@ router.post("/transaction/verify", async (req, res) => {
   res.json({
     ifVerify: ifVerify,
     message: message,
-    puKey: publicKey,
     signature: messageSign,
   });
 });
