@@ -13,68 +13,85 @@ const id = "blockchain2";
 const arrBlockchain = []; //array of blockchain2
 
 const signTx = (price, puKey, prKey) => {
-  const toPublicKey = ec.genKeyPair().getPublic("hex");
-  const message = [price, puKey, toPublicKey];
+    const toPublicKey = ec.genKeyPair().getPublic("hex");
+    const message = [price, puKey, toPublicKey];
 
-  const tx = new Signature(message, prKey, puKey, "");
-  const hashMsg = SHA256(message).toString();
-  tx.signature = ec.keyFromPrivate(prKey).sign(hashMsg, "base64").toDER("hex");
+    const tx = new Signature(message, prKey, puKey, "");
+    const hashMsg = SHA256(message).toString();
+    tx.signature = ec.keyFromPrivate(prKey).sign(hashMsg, "base64").toDER("hex");
 
-  return tx;
+    return tx;
 };
 
 const initTxPerBlock = () => {
-  arrTX = [];
-  const key = ec.genKeyPair();
+    arrTX = [];
+    const key = ec.genKeyPair();
 
-  const privateKey = key.getPrivate("hex");
-  const fromPublicKey = ec
-    .keyFromPrivate(privateKey)
-    .getPublic("hex")
-    .toString();
+    const privateKey = key.getPrivate("hex");
+    const fromPublicKey = ec
+        .keyFromPrivate(privateKey)
+        .getPublic("hex")
+        .toString();
 
-  for (let i = 0; i < Math.floor(Math.random() * 4) + 1; i++) {
-    //number of tx is between 1-4
-    let price = Math.floor(Math.random() * 100) + 1; //price between 1-100
-    arrTX.push(signTx(price, fromPublicKey, privateKey));
-  }
+    const cb = new Signature(["100", fromPublicKey, ""], "", "", ""); //coinbase
+    arrTX.push(cb);
+    for (let i = 1; i < Math.floor(Math.random() * 5) + 1; i++) {
+        //number of tx is between 1-4
+        let price = Math.floor(Math.random() * 100) + 1; //price between 1-100
+        arrTX.push(signTx(price, fromPublicKey, privateKey));
+    }
 
-  return arrTX;
+    return arrTX;
 };
 
 const initWithTX = () => {
-  const blockchain = new CryptoBlockchain();
-  let block;
-  //TODO init for first block
-  //blockchain.blockchain[0].data = initData["transactions"]["block1"];
-  for (let i = 2; i <= 5; i++) {
-    let arrTx = initTxPerBlock();
-    block = new CryptoBlock(i, "01/06/2020", arrTx);
-    blockchain.addNewBlock(block);
-  }
-  return blockchain;
+    const blockchain = new CryptoBlockchain();
+    let block;
+
+    //init for first block
+    const cb = new Signature(
+        ["100", ec.genKeyPair().getPublic("hex"), ""],
+        "",
+        "",
+        ""
+    ); //coinbase
+    blockchain.blockchain[0].data = cb;
+
+    for (let i = 2; i <= 5; i++) {
+        let arrTx = initTxPerBlock();
+        block = new CryptoBlock(i, "01/06/2020", arrTx);
+        blockchain.addNewBlock(block);
+    }
+    return blockchain;
 };
 
 const initBlockchainArrTX = () => {
-  for (let i = 0; i < 3; i++) {
-    arrBlockchain[i] = initWithTX();
-  }
+    for (let i = 0; i < 3; i++) {
+        arrBlockchain[i] = initWithTX();
+    }
 };
 
 router.get("/blockchain2/initBlockchain", (req, res) => {
-  initBlockchainArrTX();
-  const index = req.query.indexBlockchain;
-  //const cur_blockchain = arrBlockchain[index]; //current blockchain
+    initBlockchainArrTX();
+    const index = req.query.indexBlockchain;
+    //const cur_blockchain = arrBlockchain[index]; //current blockchain
 
-  //const content = new blockchainContent({
-  //    ...cur_blockchain,
-  //    id: id + index,
-  //});
-  //content.save().catch(() => {
-  //    updateBlockchain(cur_blockchain, id + index);
-  //});
+    //const content = new blockchainContent({
+    //    ...cur_blockchain,
+    //    id: id + index,
+    //});
+    //content.save().catch(() => {
+    //    updateBlockchain(cur_blockchain, id + index);
+    //});
 
-  res.send(arrBlockchain[index]);
+    //const tx = arrBlockchain[index].data.shift();
+    //const coinbase = arrBlockchain[index].data[0];
+    //res.json({
+    //    coinbase: coinbase,
+    //    tx: tx,
+    //});
+
+    res.send(arrBlockchain[index]);
 });
 
 //router.post("/blockchain/getBlockchain", (req, res) => {
