@@ -1,7 +1,6 @@
 const express = require("express");
 var bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const websiteContent = require("./model/webSchema");
 const blockContent = require("./model/blockSchema");
 const blockchainContent = require("./model/blockchainSchema");
 const signatureContent = require("./model/signatureSchema");
@@ -15,6 +14,7 @@ const routerBlockchain = require("./routes/blockchain");
 const routerKeys = require("./routes/keys");
 const routerSignature = require("./routes/signature");
 const routerTransaction = require("./routes/transaction");
+const routerBlockchain2 = require("./routes/blockchain2");
 
 app = express();
 app.use(cors());
@@ -29,6 +29,7 @@ app.use((req, res, next) => next(), routerBlockchain);
 app.use((req, res, next) => next(), routerKeys);
 app.use((req, res, next) => next(), routerSignature);
 app.use((req, res, next) => next(), routerTransaction);
+app.use((req, res, next) => next(), routerBlockchain2);
 // db config
 mongoose.connect(
     process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true },
@@ -40,7 +41,6 @@ const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 // db init with json file
 db.once("open", async function callback() {
-    await websiteContent.deleteMany();
     await blockContent.deleteMany();
     await blockchainContent.deleteMany();
     await signatureContent.deleteMany();
