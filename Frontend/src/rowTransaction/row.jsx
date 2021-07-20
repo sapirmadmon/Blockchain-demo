@@ -5,6 +5,7 @@ import style from "./row.module.css";
 const Row = (props) => {
   const descriptionData = ["$", "from", "->"];
   const coinbaseDataDescription = ["$", "->"];
+  const blockchainFinalDescription = ["$", "From", "->", "Seq", "Sig:"];
   let descrption;
 
   const indexBlock = props.indexBlock;
@@ -17,8 +18,10 @@ const Row = (props) => {
 
   if (props.data.length === 2) {
     descrption = coinbaseDataDescription;
-  } else {
+  } else if (props.data.length === 3) {
     descrption = descriptionData;
+  } else {
+    descrption = blockchainFinalDescription;
   }
 
   const rowHtml = descrption.map((description, index) => (

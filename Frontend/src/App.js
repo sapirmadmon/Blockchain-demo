@@ -11,6 +11,7 @@ import Hash from "./hash/hash";
 import Keys from "./key/keys.jsx";
 import Signatures from "./key/signatures";
 import Transaction from "./key/transaction";
+import BlockchainFinalArr from "./blockchain/blockchainFinalArr";
 
 function App() {
   return (
@@ -44,6 +45,9 @@ function App() {
           </Route>
           <Route path="/Transaction">
             <Transaction />
+          </Route>
+          <Route path="/Blockchain-2">
+            <BlockchainFinalArr />
           </Route>
         </Switch>
       </div>
