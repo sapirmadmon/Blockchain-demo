@@ -7,6 +7,7 @@ const initDataCoinbase = require("../initDataCoinbase.json");
 const blockchainContent = require("../model/blockchainSchema");
 const { updateBlockchain, findBlockchainByIndex } = require("../DB/update");
 const SHA256 = require("crypto-js/sha256");
+const { verifySignature } = require("./transaction");
 const EC = require("elliptic").ec;
 const ec = new EC("secp256k1");
 const id = "blockchain2-";
@@ -19,7 +20,7 @@ const signTx = (price, puKey, prKey) => {
     const tx = new Signature(message, prKey, puKey, "");
     const hashMsg = SHA256(message).toString();
     tx.signature = ec.keyFromPrivate(prKey).sign(hashMsg, "base64").toDER("hex");
-    tx.isVerify = tx.ifVerify();
+    tx.isVerify = verifySignature("kjhiugyugyuguy", tx.signature, puKey); //tx.ifVerify();
     return tx;
 };
 
@@ -85,9 +86,19 @@ router.get("/blockchain2/initBlockchain", (req, res) => {
 router.post("/blockchain2/getBlockchain", (req, res) => {
     const newBlock = req.body.newBlock;
     const indexBlockchain = req.body.indexBlockchain;
+    const indexTX = req.query.indexTX;
 
     const cur_blockchain = arrBlockchain[indexBlockchain];
     cur_blockchain.changeBlockchain(newBlock);
+    if (indexTX) {
+        const { message, signature, puKey } =
+        cur_blockchain.blockchain[newBlock.numBlock].data[indexTX];
+        //console.log(message, signature, puKey);
+        const isVerify = verifySignature(message, signature, puKey);
+        console.log("isVerify: ", isVerify);
+        cur_blockchain.blockchain[newBlock.numBlock].data[indexTX].isVerify =
+            isVerify;
+    }
 
     updateBlockchain(cur_blockchain, id + indexBlockchain);
 

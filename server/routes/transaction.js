@@ -8,96 +8,103 @@ const updateSign = require("../DB/updateSignature");
 const id = "transaction";
 const SHA256 = require("crypto-js/sha256");
 
-router.get("/transaction/initTransaction", async (req, res) => {
-  const key = ec.genKeyPair();
+function verifySignature(message, messageSign, publicKey) {
+    let ifVerify;
+    try {
+        const hashMsg = SHA256(message).toString();
 
-  const privateKey = key.getPrivate("hex");
-  const fromPublicKey = ec
-    .keyFromPrivate(privateKey)
-    .getPublic("hex")
-    .toString();
+        ifVerify = ec.keyFromPublic(publicKey, "hex").verify(hashMsg, messageSign);
+    } catch (error) {
+        ifVerify = false;
+    }
+    console.log("verify: ", ifVerify);
+    return ifVerify;
+}
 
-  const toPublicKey = ec.genKeyPair().getPublic("hex");
-  const message = ["20", fromPublicKey, toPublicKey];
+router.get("/transaction/initTransaction", async(req, res) => {
+    const key = ec.genKeyPair();
 
-  const signature = new Signature(
-    JSON.stringify(message),
-    privateKey,
-    fromPublicKey,
-    ""
-  );
+    const privateKey = key.getPrivate("hex");
+    const fromPublicKey = ec
+        .keyFromPrivate(privateKey)
+        .getPublic("hex")
+        .toString();
 
-  const content = new signatureContent({
-    ...signature,
-    id: id,
-  });
-  content.save().catch(() => {
-    updateSign(signature, id);
-  });
+    const toPublicKey = ec.genKeyPair().getPublic("hex");
+    const message = ["20", fromPublicKey, toPublicKey];
 
-  res.header("Access-Control-Allow-Origin", "*");
-  res.json({
-    message: message,
-    prKey: signature.prKey,
-  });
+    const signature = new Signature(
+        JSON.stringify(message),
+        privateKey,
+        fromPublicKey,
+        ""
+    );
+
+    const content = new signatureContent({
+        ...signature,
+        id: id,
+    });
+    content.save().catch(() => {
+        updateSign(signature, id);
+    });
+
+    res.header("Access-Control-Allow-Origin", "*");
+    res.json({
+        message: message,
+        prKey: signature.prKey,
+    });
 });
 
-router.post("/transaction/getPublicKey", async (req, res) => {
-  const privateKey = req.body.prKey;
+router.post("/transaction/getPublicKey", async(req, res) => {
+    const privateKey = req.body.prKey;
 
-  const publicKey = ec.keyFromPrivate(privateKey).getPublic("hex").toString();
+    const publicKey = ec.keyFromPrivate(privateKey).getPublic("hex").toString();
 
-  res.header("Access-Control-Allow-Origin", "*");
-  res.json({
-    puKey: publicKey,
-  });
+    res.header("Access-Control-Allow-Origin", "*");
+    res.json({
+        puKey: publicKey,
+    });
 });
 
-router.post("/transaction/sign", async (req, res) => {
-  const message = req.body.message;
-  const privateKey = req.body.prKey;
-  const publicKey = ec.keyFromPrivate(privateKey).getPublic("hex").toString();
+router.post("/transaction/sign", async(req, res) => {
+    const message = req.body.message;
+    const privateKey = req.body.prKey;
+    const publicKey = ec.keyFromPrivate(privateKey).getPublic("hex").toString();
 
-  const hashMsg = SHA256(message).toString();
-  const messageSign = ec
-    .keyFromPrivate(privateKey)
-    .sign(hashMsg, "base64")
-    .toDER("hex");
-
-  const signature = new Signature(
-    JSON.stringify(message),
-    privateKey,
-    publicKey,
-    messageSign
-  );
-
-  updateSign(signature, id);
-
-  res.header("Access-Control-Allow-Origin", "*");
-  res.json({
-    puKey: publicKey,
-    signature: messageSign,
-  });
-});
-
-router.post("/transaction/verify", async (req, res) => {
-  const message = req.body.message;
-  const publicKey = req.body.puKey;
-  const messageSign = req.body.signature;
-  let ifVerify;
-  try {
     const hashMsg = SHA256(message).toString();
+    const messageSign = ec
+        .keyFromPrivate(privateKey)
+        .sign(hashMsg, "base64")
+        .toDER("hex");
 
-    ifVerify = ec.keyFromPublic(publicKey, "hex").verify(hashMsg, messageSign);
-  } catch (error) {
-    ifVerify = false;
-  }
-  res.header("Access-Control-Allow-Origin", "*");
-  res.json({
-    ifVerify: ifVerify,
-    message: message,
-    signature: messageSign,
-  });
+    const signature = new Signature(
+        JSON.stringify(message),
+        privateKey,
+        publicKey,
+        messageSign
+    );
+
+    updateSign(signature, id);
+
+    res.header("Access-Control-Allow-Origin", "*");
+    res.json({
+        puKey: publicKey,
+        signature: messageSign,
+    });
 });
 
-module.exports = router;
+router.post("/transaction/verify", async(req, res) => {
+    const message = req.body.message;
+    const publicKey = req.body.puKey;
+    const messageSign = req.body.signature;
+
+    const ifVerify = verifySignature(message, messageSign, publicKey);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.json({
+        ifVerify: ifVerify,
+        message: message,
+        signature: messageSign,
+    });
+});
+
+module.exports = { router, verifySignature };

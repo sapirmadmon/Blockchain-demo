@@ -12,17 +12,17 @@ class Signature {
         this.isVerify = isVerify; //this.ifVerify();
     }
 
-    ifVerify() {
-        try {
-            const hashMsg = SHA256(this.message).toString();
+    //ifVerify() {
+    //    try {
+    //        const hashMsg = SHA256(this.message).toString();
 
-            return ec
-                .keyFromPublic(this.puKey, "hex")
-                .verify(hashMsg, this.signature);
-        } catch (error) {
-            return false;
-        }
-    }
+    //        return ec
+    //            .keyFromPublic(this.puKey, "hex")
+    //            .verify(hashMsg, this.signature);
+    //    } catch (error) {
+    //        return false;
+    //    }
+    //}
 }
 
 module.exports = Signature;

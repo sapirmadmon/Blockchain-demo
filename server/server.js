@@ -13,7 +13,7 @@ const routerBlock = require("./routes/block");
 const routerBlockchain = require("./routes/blockchain");
 const routerKeys = require("./routes/keys");
 const routerSignature = require("./routes/signature");
-const routerTransaction = require("./routes/transaction");
+const { router } = require("./routes/transaction");
 const routerBlockchain2 = require("./routes/blockchain2");
 
 app = express();
@@ -28,7 +28,7 @@ app.use((req, res, next) => next(), routerBlock);
 app.use((req, res, next) => next(), routerBlockchain);
 app.use((req, res, next) => next(), routerKeys);
 app.use((req, res, next) => next(), routerSignature);
-app.use((req, res, next) => next(), routerTransaction);
+app.use((req, res, next) => next(), router);
 app.use((req, res, next) => next(), routerBlockchain2);
 // db config
 mongoose.connect(
