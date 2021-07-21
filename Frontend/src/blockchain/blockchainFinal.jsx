@@ -4,6 +4,7 @@ import Card from "../card/card";
 import InputResult from "../input/inputResult";
 import axios from "axios";
 import ListRow from "../rowTransaction/listRow";
+import Row from "../rowTransaction/row";
 
 const BlockchainFinal = (props) => {
   const [blockArr, setBlockArr] = useState([]);
@@ -20,13 +21,24 @@ const BlockchainFinal = (props) => {
         },
       })
       .then((res) => {
-        arrOfBlock = res.data.blockchain.reduce((prev, current) => {
-          current.data = current.data.map((dataRow) => {
-            return [...dataRow.message, 1, dataRow.seq];
-          });
-          current.background = current.isMine;
-          return [...prev, current];
-        }, []);
+        console.log("res11", res);
+        arrOfBlock = res.data.blockchain.reduce(
+          (prev, current, currentIndex) => {
+            current.background = current.isMine;
+            current.coinbase = current.data[0];
+            if (currentIndex === 0) {
+              current.data = [];
+              return [...prev, current];
+            }
+            let dataField = current.data.slice(1);
+            dataField = dataField.map((dataRow) => {
+              return [...dataRow.message, dataRow.seq, dataRow.signature];
+            });
+            current.data = dataField;
+            return [...prev, current];
+          },
+          []
+        );
         setBlockArr(arrOfBlock);
       });
   }, []);
@@ -149,6 +161,10 @@ const BlockchainFinal = (props) => {
     <div>
       {createInput(index, "index", "number")}
       {createInput(index, "nonce", "number")}
+      <br></br>
+      coinbase
+      <Row data={blockArr[index].coinbase} indexBlock={index} indexRow={null} />
+      <br></br>
       Tx:
       <ListRow
         data={blockArr[index].data}
