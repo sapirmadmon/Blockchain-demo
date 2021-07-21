@@ -21,7 +21,6 @@ const BlockchainFinal = (props) => {
         },
       })
       .then((res) => {
-        console.log("res11", res);
         arrOfBlock = res.data.blockchain.reduce(
           (prev, current, currentIndex) => {
             current.background = current.isMine;
@@ -31,8 +30,10 @@ const BlockchainFinal = (props) => {
               return [...prev, current];
             }
             let dataField = current.data.slice(1);
+            current.isVerifiy = dataField.map((dataRow) => dataRow[2]);
+
             dataField = dataField.map((dataRow) => {
-              return [...dataRow.message, dataRow.seq, dataRow.signature];
+              return [...dataRow[0], dataRow[1]];
             });
             current.data = dataField;
             return [...prev, current];
@@ -45,23 +46,27 @@ const BlockchainFinal = (props) => {
 
   // on change data or block or nonce
   const getBlock = useCallback(
-    (indexBlock) => {
+    (indexBlock, indexTx) => {
+      let arrOfBlock;
+      //[["1",2,3,4,5,6]] =>[[1,2,3,4],5,6]
+      const message = blockArr[indexBlock].data.map((arr) => [
+        [arr.slice(0, 3)],
+        arr[4],
+        arr[5],
+      ]);
       axios
-        .post("http://localhost:3030/blockchain/getBlockchain", {
+        .post("http://localhost:3030/blockchain2/getBlockchain", {
           newBlock: {
             numBlock: indexBlock,
-            data: blockArr[indexBlock].data,
+            data: [blockArr[indexBlock].coinbase, ...message],
             nonce: blockArr[indexBlock].nonce,
             index: blockArr[indexBlock].index,
           },
           indexBlockchain: indexBlockchain,
+          indexTx: indexTx,
         })
         .then((res) => {
-          const blockchain = res.data.blockchain.map((block, index) => {
-            block.background = block.isMine;
-            return block;
-          });
-          setBlockArr(blockchain);
+          console.log(res.data.blockchain);
         });
     },
     [blockArr]
@@ -74,10 +79,12 @@ const BlockchainFinal = (props) => {
         .post("http://localhost:3030/blockchain/mine", {
           newBlock: {
             numBlock: indexBlock,
-            data: blockArr[indexBlock].data,
+            data: [
+              ...blockArr[indexBlock].coinbase,
+              ...blockArr[indexBlock].data,
+            ],
             nonce: blockArr[indexBlock].nonce,
             index: blockArr[indexBlock].index,
-            indexBlockchain: indexBlockchain,
           },
           indexBlockchain: indexBlockchain,
         })
@@ -95,7 +102,7 @@ const BlockchainFinal = (props) => {
 
   const onChangeValue = (e, index, value) => {
     blockArr[index][value] = e.target.value;
-    getBlock(index);
+    getBlock(index, null);
   };
 
   const inputResult = (index) => (
@@ -154,7 +161,7 @@ const BlockchainFinal = (props) => {
     const copyArr = [...blockArr];
     copyArr[index].data[indexArr][indexData] = newValue;
     setBlockArr(copyArr);
-    getBlock(index);
+    getBlock(index, indexArr + 1);
   };
 
   const divInput = (index) => (
@@ -166,12 +173,14 @@ const BlockchainFinal = (props) => {
       <Row data={blockArr[index].coinbase} indexBlock={index} indexRow={null} />
       <br></br>
       Tx:
-      <ListRow
-        data={blockArr[index].data}
-        key={index}
-        indexBlock={index}
-        onchange={onChangedata}
-      />
+      {blockArr[index].data.length && (
+        <ListRow
+          data={blockArr[index].data}
+          key={index}
+          indexBlock={index}
+          onchange={onChangedata}
+        />
+      )}
     </div>
   );
 

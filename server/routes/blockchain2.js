@@ -15,13 +15,15 @@ const arrBlockchain = []; //array of blockchain2
 
 const signTx = (price, puKey, prKey) => {
   const toPublicKey = ec.genKeyPair().getPublic("hex");
-  const message = [price, puKey, toPublicKey];
+  const message = [price, puKey, toPublicKey, 1];
 
-  const tx = new Signature(message, prKey, puKey, "");
   const hashMsg = SHA256(JSON.stringify(message)).toString();
-  tx.signature = ec.keyFromPrivate(prKey).sign(hashMsg, "base64").toDER("hex");
-  tx.isVerify = verifySignature("kjhiugyugyuguy", tx.signature, puKey); //tx.ifVerify();
-  return tx;
+  const signature = ec
+    .keyFromPrivate(prKey)
+    .sign(hashMsg, "base64")
+    .toDER("hex");
+  const isVerify = verifySignature(message, signature, puKey); //tx.ifVerify();
+  return [message, signature, isVerify, prKey, puKey];
 };
 
 const initTxPerBlock = () => {
@@ -48,8 +50,8 @@ const initWithTX = () => {
   const blockchain = new CryptoBlockchain();
   let block;
   const pubKey = ec.genKeyPair().getPublic("hex");
-  //init for first block
-  //const cb = new Signature(["100", pubKey, ""], "", "", ""); //coinbase
+
+  //coinbase - init for first block
   blockchain.blockchain[0].data = [];
   blockchain.blockchain[0].data.push(["100", pubKey]);
 
@@ -79,7 +81,6 @@ router.get("/blockchain2/initBlockchain", (req, res) => {
   content.save().catch(() => {
     updateBlockchain(cur_blockchain, id + index);
   });
-
   res.send(arrBlockchain[index]);
 });
 
@@ -87,19 +88,20 @@ router.post("/blockchain2/getBlockchain", (req, res) => {
   const newBlock = req.body.newBlock;
   const indexBlockchain = req.body.indexBlockchain;
   const indexTX = req.query.indexTX;
-
+  // neblock.data [message,sig, isverifiy]
+  //=>[message,sig,isverifiy, ((cur_blockchain.blockchain[newBlock.numBlock])))prkey,publickey]
   const cur_blockchain = arrBlockchain[indexBlockchain];
+  console.log("before", cur_blockchain.blockchain[newBlock.numBlock]);
   cur_blockchain.changeBlockchain(newBlock);
+  console.log("after: ", cur_blockchain.blockchain[newBlock.numBlock]);
+
   if (indexTX) {
     const { message, signature, puKey } =
       cur_blockchain.blockchain[newBlock.numBlock].data[indexTX];
-    //console.log(message, signature, puKey);
     const isVerify = verifySignature(message, signature, puKey);
-    console.log("isVerify: ", isVerify);
     cur_blockchain.blockchain[newBlock.numBlock].data[indexTX].isVerify =
       isVerify;
   }
-
   updateBlockchain(cur_blockchain, id + indexBlockchain);
 
   res.send(cur_blockchain);
