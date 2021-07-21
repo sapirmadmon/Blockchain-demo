@@ -17,7 +17,6 @@ const Transaction = () => {
     axios
       .get("http://localhost:3030/transaction/initTransaction")
       .then((res) => {
-        console.log(res);
         setPrivateKey(res.data.prKey);
         setData([res.data.message]);
       });
@@ -49,7 +48,7 @@ const Transaction = () => {
       })
       .then((res) => {
         setSign(res.data.signature);
-        copyArr[0][1] = res.data.puKey;
+        copyArr[0][1] = res.data.message[1];
         setIsVerify(res.data.ifVerify);
         setData(copyArr);
       });
