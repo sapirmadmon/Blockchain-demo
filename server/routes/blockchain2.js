@@ -81,26 +81,30 @@ router.get("/blockchain2/initBlockchain", (req, res) => {
     content.save().catch(() => {
         updateBlockchain(cur_blockchain, id + index);
     });
+    //console.log("init: ");
+    //console.log(arrBlockchain[0].blockchain[2].data);
     res.send(arrBlockchain[index]);
 });
 
 router.post("/blockchain2/getBlockchain", (req, res) => {
     const newBlock = req.body.newBlock;
     const indexBlockchain = req.body.indexBlockchain;
-    const indexTX = req.query.indexTX;
+    const indexTX = req.body.indexTx;
     // neblock.data [message,sig, isverifiy]
     //=>[message,sig,isverifiy, ((cur_blockchain.blockchain[newBlock.numBlock])))prkey,publickey]
 
-    const cur_blockchain = arrBlockchain[indexBlockchain];
-    console.log(cur_blockchain.blockchain[newBlock.numBlock].data[indexTX]);
+    console.log("change block");
+    const cur_blockchain = arrBlockchain[0];
+    console.log(cur_blockchain.blockchain[1].data);
+
     newBlock.data.push(
-        cur_blockchain.blockchain[newBlock.numBlock].data[indexTX].slice(3, 4)
+        cur_blockchain.blockchain[newBlock.numBlock].data[indexTX].slice(3, 5)
     );
     //console.log("newBlock.data: ", newBlock.data);
 
-    console.log("before", cur_blockchain.blockchain[newBlock.numBlock]);
+    //console.log("before", cur_blockchain.blockchain[newBlock.numBlock]);
     cur_blockchain.changeBlockchain(newBlock);
-    console.log("after: ", cur_blockchain.blockchain[newBlock.numBlock]);
+    //console.log("after: ", cur_blockchain.blockchain[newBlock.numBlock]);
 
     if (indexTX) {
         const { message, signature, puKey } =
