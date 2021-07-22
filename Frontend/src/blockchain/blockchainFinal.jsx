@@ -54,7 +54,7 @@ const BlockchainFinal = (props) => {
         blockArr[indexBlock].isVerifiy[index],
       ]);
       axios
-        .post("http://localhost:3030/blockchain2/getBlockchain", ,{
+        .post("http://localhost:3030/blockchain2/getBlockchain", {
           newBlock: {
             numBlock: indexBlock,
             data: [blockArr[indexBlock].coinbase, ...data],
@@ -62,7 +62,7 @@ const BlockchainFinal = (props) => {
             index: blockArr[indexBlock].index,
           },
           indexBlockchain: indexBlockchain,
-          indexTx: indexTX
+          indexTx: indexTx,
         })
         .then((res) => {
           console.log(res.data.blockchain);
