@@ -25,7 +25,6 @@ class CryptoBlockchain {
     startGenesisBlock() {
         const firstBlock = new CryptoBlock(1, "01/01/2020", "", "0");
         firstBlock.mineBlock(3);
-
         return firstBlock;
     }
 
@@ -47,7 +46,7 @@ class CryptoBlockchain {
 
         for (let i = newBlock.numBlock; i < this.blockchain.length; i++) {
             if (i === 0) {
-                this.blockchain[i].precedingHash = 0;
+                this.blockchain[i].precedingHash = "0";
                 this.blockchain[i].hash = this.blockchain[i].computeHash();
             } else {
                 this.blockchain[i].precedingHash = this.blockchain[i - 1].hash;
