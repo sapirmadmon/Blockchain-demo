@@ -48,23 +48,24 @@ const BlockchainFinal = (props) => {
   const getBlock = useCallback(
     (indexBlock, indexTx) => {
       let arrOfBlock;
-      //[["1",2,3,4,5,6]] =>[[1,2,3,4],5,6]
-      const message = blockArr[indexBlock].data.map((arr) => [
+      const message = blockArr[indexBlock].data.map((arr, index) => [
         [arr.slice(0, 3)],
         arr[4],
         arr[5],
       ]);
       axios
-        .post("http://localhost:3030/blockchain2/getBlockchain", {
-          newBlock: {
-            numBlock: indexBlock,
-            data: [blockArr[indexBlock].coinbase, ...message],
-            nonce: blockArr[indexBlock].nonce,
-            index: blockArr[indexBlock].index,
-          },
-          indexBlockchain: indexBlockchain,
-          indexTx: indexTx,
-        })
+        .post(
+          `http://localhost:3030/blockchain2/getBlockchain?indexTx:${indexTx}`,
+          {
+            newBlock: {
+              numBlock: indexBlock,
+              data: [blockArr[indexBlock].coinbase, ...message],
+              nonce: blockArr[indexBlock].nonce,
+              index: blockArr[indexBlock].index,
+            },
+            indexBlockchain: indexBlockchain,
+          }
+        )
         .then((res) => {
           console.log(res.data.blockchain);
         });
