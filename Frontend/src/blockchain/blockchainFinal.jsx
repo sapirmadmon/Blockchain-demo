@@ -49,7 +49,7 @@ const BlockchainFinal = (props) => {
     (indexBlock, indexTx) => {
       let arrOfBlock;
       const data = blockArr[indexBlock].data.map((arr, index) => [
-        [arr.slice(0, 3)],
+        arr.slice(0, 4),
         arr[4],
         blockArr[indexBlock].isVerifiy[index],
       ]);
@@ -65,7 +65,26 @@ const BlockchainFinal = (props) => {
           indexTx: indexTx,
         })
         .then((res) => {
-          console.log(res.data.blockchain);
+          arrOfBlock = res.data.blockchain.reduce(
+            (prev, current, currentIndex) => {
+              current.background = current.isMine;
+              current.coinbase = current.data[0];
+              if (currentIndex === 0) {
+                current.data = [];
+                return [...prev, current];
+              }
+              let dataField = current.data.slice(1);
+              current.isVerifiy = dataField.map((dataRow) => dataRow[2]);
+
+              dataField = dataField.map((dataRow) => {
+                return [...dataRow[0], dataRow[1]];
+              });
+              current.data = dataField;
+              return [...prev, current];
+            },
+            []
+          );
+          setBlockArr(arrOfBlock);
         });
     },
     [blockArr]
@@ -100,7 +119,16 @@ const BlockchainFinal = (props) => {
   );
 
   const onChangeValue = (e, index, value) => {
-    blockArr[index][value] = e.target.value;
+    const copyBlockArr = [...blockArr];
+    copyBlockArr[index][value] = e.target.value;
+    setBlockArr(copyBlockArr);
+    getBlock(index, null);
+  };
+
+  const onChangeCoinbase = (index, indexData, newValue, indexArr) => {
+    const copyBlockArr = [...blockArr];
+    copyBlockArr[index].coinbase[indexData] = newValue;
+    setBlockArr(copyBlockArr);
     getBlock(index, null);
   };
 
@@ -169,7 +197,12 @@ const BlockchainFinal = (props) => {
       {createInput(index, "nonce", "number")}
       <br></br>
       coinbase
-      <Row data={blockArr[index].coinbase} indexBlock={index} indexRow={null} />
+      <Row
+        data={blockArr[index].coinbase}
+        indexBlock={index}
+        indexRow={null}
+        onchange={onChangeCoinbase}
+      />
       <br></br>
       Tx:
       {blockArr[index].data.length && (
@@ -178,6 +211,7 @@ const BlockchainFinal = (props) => {
           key={index}
           indexBlock={index}
           onchange={onChangedata}
+          isVerifiy={blockArr[index].isVerifiy}
         />
       )}
     </div>

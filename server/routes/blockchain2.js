@@ -2,10 +2,8 @@ const express = require("express");
 const router = express.Router();
 const CryptoBlock = require("../blockchain/block");
 const CryptoBlockchain = require("../blockchain/cryptoBlockchain");
-const Signature = require("../public-private-keys/signature");
-const initDataCoinbase = require("../initDataCoinbase.json");
 const blockchainContent = require("../model/blockchainSchema");
-const { updateBlockchain, findBlockchainByIndex } = require("../DB/update");
+const { updateBlockchain } = require("../DB/update");
 const SHA256 = require("crypto-js/sha256");
 const { verifySignature } = require("./transaction");
 const EC = require("elliptic").ec;
@@ -22,7 +20,8 @@ const signTx = (price, puKey, prKey) => {
     .keyFromPrivate(prKey)
     .sign(hashMsg, "base64")
     .toDER("hex");
-  const isVerify = verifySignature(message, signature, puKey); //tx.ifVerify();
+
+  const isVerify = verifySignature(message, signature, puKey);
   return [message, signature, isVerify, prKey, puKey];
 };
 
@@ -39,7 +38,7 @@ const initTxPerBlock = () => {
   arrTX.push(["100", fromPublicKey]);
   for (let i = 0; i < Math.floor(Math.random() * 5) + 1; i++) {
     //number of tx is between 1-4
-    let price = Math.floor(Math.random() * 100) + 1; //price between 1-100
+    let price = Math.floor(Math.random() * 100) + 1 + ""; //price between 1-100
     arrTX.push(signTx(price, fromPublicKey, privateKey));
   }
 
@@ -63,15 +62,13 @@ const initWithTX = () => {
   return blockchain;
 };
 
-const initBlockchainArrTX = () => {
-  for (let i = 0; i < 3; i++) {
-    arrBlockchain[i] = initWithTX();
-  }
+const initBlockchainArrTX = (index) => {
+  arrBlockchain[index] = initWithTX();
 };
 
 router.get("/blockchain2/initBlockchain", (req, res) => {
-  initBlockchainArrTX();
   const index = req.query.indexBlockchain;
+  initBlockchainArrTX(index);
   const cur_blockchain = arrBlockchain[index]; //current blockchain
 
   const content = new blockchainContent({
@@ -81,27 +78,37 @@ router.get("/blockchain2/initBlockchain", (req, res) => {
   content.save().catch(() => {
     updateBlockchain(cur_blockchain, id + index);
   });
+
   res.send(arrBlockchain[index]);
 });
 
 router.post("/blockchain2/getBlockchain", (req, res) => {
   const newBlock = req.body.newBlock;
   const indexBlockchain = req.body.indexBlockchain;
-  const indexTX = req.query.indexTX;
-  // neblock.data [message,sig, isverifiy]
-  //=>[message,sig,isverifiy, ((cur_blockchain.blockchain[newBlock.numBlock])))prkey,publickey]
+  const indexTx = req.body.indexTx;
   const cur_blockchain = arrBlockchain[indexBlockchain];
-  console.log("before", cur_blockchain.blockchain[newBlock.numBlock]);
-  cur_blockchain.changeBlockchain(newBlock);
-  console.log("after: ", cur_blockchain.blockchain[newBlock.numBlock]);
 
-  if (indexTX) {
-    const { message, signature, puKey } =
-      cur_blockchain.blockchain[newBlock.numBlock].data[indexTX];
-    const isVerify = verifySignature(message, signature, puKey);
-    cur_blockchain.blockchain[newBlock.numBlock].data[indexTX].isVerify =
-      isVerify;
+  if (indexTx) {
+    newBlock.data = [...newBlock.data].map((arr, index) => {
+      if (index > 0)
+        arr.push(
+          ...cur_blockchain.blockchain[newBlock.numBlock].data[indexTx].slice(
+            3,
+            5
+          )
+        );
+      return arr;
+    });
   }
+
+  cur_blockchain.changeBlockchain(newBlock);
+
+  if (indexTx) {
+    const arrTx = cur_blockchain.blockchain[newBlock.numBlock].data[indexTx];
+    const isVerify = verifySignature(arrTx[0], arrTx[1], arrTx[4]);
+    cur_blockchain.blockchain[newBlock.numBlock].data[indexTx][2] = isVerify;
+  }
+
   updateBlockchain(cur_blockchain, id + indexBlockchain);
 
   res.send(cur_blockchain);

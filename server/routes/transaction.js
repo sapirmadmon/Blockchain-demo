@@ -12,7 +12,6 @@ function verifySignature(message, messageSign, publicKey) {
   let ifVerify;
   try {
     const hashMsg = SHA256(JSON.stringify(message)).toString();
-
     ifVerify = ec.keyFromPublic(publicKey, "hex").verify(hashMsg, messageSign);
   } catch (error) {
     ifVerify = false;

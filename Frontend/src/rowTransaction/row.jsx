@@ -8,6 +8,7 @@ const Row = (props) => {
   const blockchainFinalDescription = ["$", "From", "->", "Seq", "Sig:"];
   let descrption;
 
+  const isVerify = props.isVerify;
   const indexBlock = props.indexBlock;
   const indexRow = props.indexRow;
 
@@ -31,7 +32,11 @@ const Row = (props) => {
       </label>
       <input
         type="text"
-        className={style.inputData}
+        className={`${style.inputData} ${
+          Array.isArray(isVerify) && !isVerify[index] && index === 4
+            ? style.redColor
+            : style.blackColor
+        }`}
         key={index + description}
         name={index + description}
         value={props.data[index]}

@@ -14,6 +14,7 @@ const ListRow = (props) => {
             indexRow={index}
             indexBlock={indexBlock}
             key={index}
+            isVerifiy={props.isVerifiy ? props.isVerifiy[index] : null}
           />
         ))}
     </div>
