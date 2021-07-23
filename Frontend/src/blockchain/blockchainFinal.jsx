@@ -30,7 +30,7 @@ const BlockchainFinal = (props) => {
               return [...prev, current];
             }
             let dataField = current.data.slice(1);
-            current.isVerifiy = dataField.map((dataRow) => dataRow[2]);
+            current.isVerify = dataField.map((dataRow) => dataRow[2]);
 
             dataField = dataField.map((dataRow) => {
               return [...dataRow[0], dataRow[1]];
@@ -51,7 +51,7 @@ const BlockchainFinal = (props) => {
       const data = blockArr[indexBlock].data.map((arr, index) => [
         arr.slice(0, 4),
         arr[4],
-        blockArr[indexBlock].isVerifiy[index],
+        blockArr[indexBlock].isVerify[index],
       ]);
       axios
         .post("http://localhost:3030/blockchain2/getBlockchain", {
@@ -74,7 +74,7 @@ const BlockchainFinal = (props) => {
                 return [...prev, current];
               }
               let dataField = current.data.slice(1);
-              current.isVerifiy = dataField.map((dataRow) => dataRow[2]);
+              current.isVerify = dataField.map((dataRow) => dataRow[2]);
 
               dataField = dataField.map((dataRow) => {
                 return [...dataRow[0], dataRow[1]];
@@ -94,25 +94,34 @@ const BlockchainFinal = (props) => {
   const mineBlock = useCallback(
     (indexBlock) => {
       axios
-        .post("http://localhost:3030/blockchain/mine", {
+        .post("http://localhost:3030/blockchain2/mine", {
           newBlock: {
             numBlock: indexBlock,
-            data: [
-              ...blockArr[indexBlock].coinbase,
-              ...blockArr[indexBlock].data,
-            ],
-            nonce: blockArr[indexBlock].nonce,
-            index: blockArr[indexBlock].index,
           },
           indexBlockchain: indexBlockchain,
         })
         .then((res) => {
-          const netBlockArr = res.data.blockchain.map((block, index) => {
-            block.background = block.isMine;
-            return block;
-          });
+          const arrOfBlock = res.data.blockchain.reduce(
+            (prev, current, currentIndex) => {
+              current.background = current.isMine;
+              current.coinbase = current.data[0];
+              if (currentIndex === 0) {
+                current.data = [];
+                return [...prev, current];
+              }
+              let dataField = current.data.slice(1);
+              current.isVerify = dataField.map((dataRow) => dataRow[2]);
 
-          setBlockArr(netBlockArr);
+              dataField = dataField.map((dataRow) => {
+                return [...dataRow[0], dataRow[1]];
+              });
+              current.data = dataField;
+              return [...prev, current];
+            },
+            []
+          );
+
+          setBlockArr(arrOfBlock);
         });
     },
     [blockArr]
@@ -211,7 +220,7 @@ const BlockchainFinal = (props) => {
           key={index}
           indexBlock={index}
           onchange={onChangedata}
-          isVerifiy={blockArr[index].isVerifiy}
+          isVerify={blockArr[index].isVerify}
         />
       )}
     </div>

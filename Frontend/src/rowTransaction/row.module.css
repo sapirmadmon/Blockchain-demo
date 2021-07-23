@@ -15,7 +15,7 @@
 }
 
 .inputData {
-  width: 40%;
+  width: 100%;
   line-height: 1.42857;
   background-color: rgb(255, 255, 255);
   background-image: none;
@@ -34,6 +34,7 @@
 }
 .space {
   margin: 0px;
+  display: grid;
 }
 
 .redColor {

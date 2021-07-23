@@ -104,14 +104,6 @@ router.post("/blockchain/getBlockchain", (req, res) => {
   const newBlock = req.body.newBlock;
   const indexBlockchain = req.body.indexBlockchain;
   const cur_blockchain = arrBlockchain[indexBlockchain];
-  console.log("before change data");
-  console.log();
-  console.log(cur_blockchain);
-  console.log();
-
-  console.log("data init: ", cur_blockchain.blockchain[newBlock.numBlock].data);
-
-  console.log();
 
   cur_blockchain.changeBlockchain(newBlock);
 

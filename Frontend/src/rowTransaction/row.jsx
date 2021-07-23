@@ -33,9 +33,7 @@ const Row = (props) => {
       <input
         type="text"
         className={`${style.inputData} ${
-          Array.isArray(isVerify) && !isVerify[index] && index === 4
-            ? style.redColor
-            : style.blackColor
+          isVerify === false && index === 4 ? style.redColor : style.blackColor
         }`}
         key={index + description}
         name={index + description}

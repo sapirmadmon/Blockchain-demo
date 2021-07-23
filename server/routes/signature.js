@@ -40,7 +40,7 @@ router.post("/signature/sign", async (req, res) => {
   const privateKey = req.body.prKey;
   const publicKey = ec.keyFromPrivate(privateKey).getPublic("hex").toString();
 
-  const hashMsg = SHA256(message).toString();
+  const hashMsg = SHA256(JSON.stringify(message)).toString();
   const messageSign = ec
     .keyFromPrivate(privateKey)
     .sign(hashMsg, "base64")
@@ -64,6 +64,7 @@ router.post("/signature/verify", async (req, res) => {
   const messageSign = req.body.signature;
 
   const ifVerify = verifySignature(message, messageSign, publicKey);
+
   res.json({
     ifVerify: ifVerify,
     message: message,
