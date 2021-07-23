@@ -35,7 +35,7 @@ router.post("/block/getBlock", async (req, res) => {
   const data = req.body.data;
   const nonce = req.body.nonce;
 
-  block = new CryptoBlock(index, Date.now(), data, "", nonce);
+  block = new CryptoBlock(index + "", Date.now(), data, "", nonce);
   block.checkIfBlockMine();
   updateBlock(block, id);
 
@@ -52,7 +52,7 @@ router.post("/block/getBlock", async (req, res) => {
 router.post("/block/mine", async (req, res) => {
   const index = req.body.index;
   const data = req.body.data;
-  block = new CryptoBlock(index, Date.now(), data);
+  block = new CryptoBlock(index + "", Date.now(), data);
   block.mineBlock(diffculty);
 
   updateBlock(block, id);

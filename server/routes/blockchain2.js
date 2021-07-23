@@ -13,7 +13,7 @@ const arrBlockchain = []; //array of blockchain2
 
 const signTx = (price, puKey, prKey) => {
   const toPublicKey = ec.genKeyPair().getPublic("hex");
-  const message = [price, puKey, toPublicKey, 1];
+  const message = [price, puKey, toPublicKey, "1"];
 
   const hashMsg = SHA256(JSON.stringify(message)).toString();
   const signature = ec
@@ -51,12 +51,16 @@ const initWithTX = () => {
   const pubKey = ec.genKeyPair().getPublic("hex");
 
   //coinbase - init for first block
+  blockchain.blockchain[0].index = "1";
   blockchain.blockchain[0].data = [];
   blockchain.blockchain[0].data.push(["100", pubKey]);
+  blockchain.blockchain[0].nonce = 0;
+  blockchain.blockchain[0].hash = blockchain.blockchain[0].computeHash();
+  blockchain.blockchain[0].mineBlock(3);
 
   for (let i = 2; i <= 5; i++) {
     const arrTx = initTxPerBlock();
-    block = new CryptoBlock(i, "01/06/2020", arrTx);
+    block = new CryptoBlock(i + "", "01/06/2020", arrTx);
     blockchain.addNewBlock(block);
   }
   return blockchain;
@@ -87,19 +91,15 @@ router.post("/blockchain2/getBlockchain", (req, res) => {
   const indexBlockchain = req.body.indexBlockchain;
   const indexTx = req.body.indexTx;
   const cur_blockchain = arrBlockchain[indexBlockchain];
+  console.log();
 
-  if (indexTx) {
-    newBlock.data = [...newBlock.data].map((arr, index) => {
-      if (index > 0)
-        arr.push(
-          ...cur_blockchain.blockchain[newBlock.numBlock].data[indexTx].slice(
-            3,
-            5
-          )
-        );
-      return arr;
-    });
-  }
+  console.log(cur_blockchain);
+  console.log();
+  console.log(
+    "before change data:",
+    cur_blockchain.blockchain[newBlock.numBlock].data
+  );
+  console.log();
 
   cur_blockchain.changeBlockchain(newBlock);
 
@@ -108,6 +108,14 @@ router.post("/blockchain2/getBlockchain", (req, res) => {
     const isVerify = verifySignature(arrTx[0], arrTx[1], arrTx[4]);
     cur_blockchain.blockchain[newBlock.numBlock].data[indexTx][2] = isVerify;
   }
+  /*
+  console.log();
+  console.log();
+  console.log(cur_blockchain.blockchain[newBlock.numBlock].data);
+  console.log();
+  console.log(cur_blockchain);
+  console.log();
+  console.log();*/
 
   updateBlockchain(cur_blockchain, id + indexBlockchain);
 

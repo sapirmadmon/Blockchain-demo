@@ -1,30 +1,28 @@
 {
-    "transactions": {
-        "block1": [
-            [100, "Andres"]
-        ],
-        "block2": [
-            [100, "Andres"],
-            [30, "Andres", "Apone"],
-            [20, "Andres", "Jackson"],
-            [5, "Andres", "Sophia"]
-        ],
-        "block3": [
-            [100, "Andres"],
-            [5, "Sophia", "Sum"],
-            [10, "Jackson", "Grace"]
-        ],
-        "block4": [
-            [100, "Andres"],
-            [98, "Sum", "Madison"],
-            [63, "Sophia", "Emily"],
-            [20, "Jackson", "Ilsa"],
-            [123, "Grace", "Rick"]
-        ],
-        "block5": [
-            [100, "Sophia"],
-            [60, "Jackson", "Sum"],
-            [32, "Ryan", "Victor"]
-        ]
-    }
+  "transactions": {
+    "block1": [["100", "Andres"]],
+    "block2": [
+      ["100", "Andres"],
+      ["30", "Andres", "Apone"],
+      ["20", "Andres", "Jackson"],
+      ["5", "Andres", "Sophia"]
+    ],
+    "block3": [
+      ["100", "Andres"],
+      ["5", "Sophia", "Sum"],
+      ["10", "Jackson", "Grace"]
+    ],
+    "block4": [
+      ["100", "Andres"],
+      ["98", "Sum", "Madison"],
+      ["63", "Sophia", "Emily"],
+      ["20", "Jackson", "Ilsa"],
+      ["123", "Grace", "Rick"]
+    ],
+    "block5": [
+      ["100", "Sophia"],
+      ["60", "Jackson", "Sum"],
+      ["32", "Ryan", "Victor"]
+    ]
+  }
 }

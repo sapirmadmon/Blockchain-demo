@@ -1,28 +1,28 @@
 {
-    "transactions": {
-        "block1": [
-            [25, "Darcy", "Lydia"],
-            [100, "Ander", "Sum"],
-            [10, "Kane", "Ash"]
-        ],
-        "block2": [
-            [30, "Ander", "Apone"],
-            [20, "Emily", "Jackson"],
-            [5, "Ander", "Jackson"]
-        ],
-        "block3": [
-            [62, "Denise", "Sum"],
-            [32, "Madison", "Grace"]
-        ],
-        "block4": [
-            [98, "Ander", "Sum"],
-            [63, "Ander", "Emily"],
-            [20, "Rick", "Ilsa"],
-            [123, "Victor", "Rick"]
-        ],
-        "block5": [
-            [60, "Captain", "Sum"],
-            [32, "Ander", "Victor"]
-        ]
-    }
+  "transactions": {
+    "block1": [
+      ["25", "Darcy", "Lydia"],
+      ["100", "Ander", "Sum"],
+      ["10", "Kane", "Ash"]
+    ],
+    "block2": [
+      ["30", "Ander", "Apone"],
+      ["20", "Emily", "Jackson"],
+      ["5", "Ander", "Jackson"]
+    ],
+    "block3": [
+      ["62", "Denise", "Sum"],
+      ["32", "Madison", "Grace"]
+    ],
+    "block4": [
+      ["98", "Ander", "Sum"],
+      ["63", "Ander", "Emily"],
+      ["20", "Rick", "Ilsa"],
+      ["123", "Victor", "Rick"]
+    ],
+    "block5": [
+      ["60", "Captain", "Sum"],
+      ["32", "Ander", "Victor"]
+    ]
+  }
 }

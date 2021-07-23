@@ -14,7 +14,7 @@ const initBlockchain = () => {
   const blockchain = new CryptoBlockchain();
   let block;
   for (let i = 2; i <= 5; i++) {
-    block = new CryptoBlock(i, "01/06/2020", "");
+    block = new CryptoBlock(i + "", "01/06/2020", "");
     blockchain.addNewBlock(block);
   }
   return blockchain;
@@ -27,11 +27,15 @@ const initBlockchainArr = (index) => {
 const initWithTX = (initData) => {
   const blockchain = new CryptoBlockchain();
   let block;
-
+  // we change data so we need compute mine block on the init
   blockchain.blockchain[0].data = initData["transactions"]["block1"];
+  blockchain.blockchain[0].nonce = 0;
+  blockchain.blockchain[0].hash = blockchain.blockchain[0].computeHash();
+  blockchain.blockchain[0].mineBlock(3);
+
   for (let i = 2; i <= 5; i++) {
     block = new CryptoBlock(
-      i,
+      i + "",
       "01/06/2020",
       initData["transactions"]["block" + i + ""]
     );
@@ -99,8 +103,16 @@ router.get("/blockchain/initBlockchain", (req, res) => {
 router.post("/blockchain/getBlockchain", (req, res) => {
   const newBlock = req.body.newBlock;
   const indexBlockchain = req.body.indexBlockchain;
-
   const cur_blockchain = arrBlockchain[indexBlockchain];
+  console.log("before change data");
+  console.log();
+  console.log(cur_blockchain);
+  console.log();
+
+  console.log("data init: ", cur_blockchain.blockchain[newBlock.numBlock].data);
+
+  console.log();
+
   cur_blockchain.changeBlockchain(newBlock);
 
   updateBlockchain(cur_blockchain, id + indexBlockchain);
