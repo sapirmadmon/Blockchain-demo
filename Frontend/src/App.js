@@ -12,12 +12,13 @@ import Keys from "./key/keys.jsx";
 import Signatures from "./key/signatures";
 import Transaction from "./key/transaction";
 import BlockchainFinalArr from "./blockchain/blockchainFinalArr";
+import style from "./App.module.css";
 
 function App() {
   return (
     <Router>
-      <div>
-        <Navbar />
+      <Navbar />
+      <div className={style.margin}>
         <Switch>
           <Route path="/block">
             <Block></Block>
