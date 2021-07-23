@@ -119,14 +119,29 @@ router.post("/blockchain2/getBlockchain", (req, res) => {
 });
 
 router.post("/blockchain2/mine", (req, res) => {
-    const indexBlockchain = req.body.indexBlockchain;
     const newBlock = req.body.newBlock;
-    arrBlockchain[indexBlockchain].mineBlockchain(newBlock);
+    const indexBlockchain = req.body.indexBlockchain;
 
     const cur_blockchain = arrBlockchain[indexBlockchain];
+
+    if (newBlock.numBlock > 0) {
+        const firstTX = cur_blockchain.blockchain[newBlock.numBlock].data[1];
+        const prKey = firstTX[3];
+        const puKey = firstTX[4];
+
+        newBlock.data = [...newBlock.data].map((data, index) => {
+            if (index > 0) {
+                data.push(prKey, puKey);
+            }
+            return data;
+        });
+    }
+
+    cur_blockchain.mineBlockchain(newBlock);
+
     updateBlockchain(cur_blockchain, id + indexBlockchain);
 
-    res.send(arrBlockchain[indexBlockchain]);
+    res.send(cur_blockchain);
 });
 
 module.exports = router;
