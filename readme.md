@@ -1,5 +1,3 @@
-Name : Harel Azim Tas, Sapir
-
 Install
 
 1. cd to Frontend and insert into terminal "npm install"
